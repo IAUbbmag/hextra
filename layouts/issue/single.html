@@ -10,7 +10,7 @@
 {{- $layoutdesigner := (T "layoutdesigner") | default "Layout Designer" -}}
 {{- $logodesigner := (T "logodesigner") | default "Logo Designer" -}}
 {{- $photographer := (T "photographer") | default "Photographer" -}}
-{{- $description := (T "description") | default "Description" -}}
+{{- $description1 := (T "description1") | default "Description" -}}
 {{- $date1 := (T "date1") | default "Date" -}}
 {{- $toc1 := (T "toc1") | default "Table of Contents" -}}
 {{- $references := (T "references") | default "References" -}}
@@ -18,7 +18,8 @@
 {{- $dll := (T "dll") | default "Download" -}}
 {{- $close := (T "close") | default "Close" -}}
 <div class='container p-6 grid grid-cols-1 md:grid-cols-3 gap-6 hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
-   
+    {{ partial "sidebar.html" (dict "context" .) }}
+    {{ partial "toc.html" . }}
     <!-- Poster With download button-->
     <div class="md:col-span-1">
         <div class="sticky top-5 md:top-20 transition-all duration-300 ease-in-out">
@@ -51,7 +52,7 @@
         <!-- Description -->
         {{ if .Summary }}
         <div class=" p-4 rounded-lg shadow">
-            <h2 class="text-xl font-semibold">{{ $description }}</h2>
+            <h2 class="text-xl font-semibold">{{ $description1 }}</h2>
             <p id="desc" class="description mt-2">{{ .Summary }}</p>
         </div>
         {{ end }}
@@ -306,28 +307,6 @@
                 </div>
             </div>
         {{ end }}
-        {{ if .Params.literaryeditor }}
-            <div class=" p-4 rounded-lg shadow">
-                <h2 class="text-2xl font-bold">{{ $toc1 }}:</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
-                    {{ range .Params.literaryeditor }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
-                            {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
-                            {{ end }}
-                        {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                    </div>
-                    {{ end }}
-                </div>
-            </div>
-        {{ end }}
-
     </div>
 </div>
 
