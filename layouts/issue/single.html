@@ -63,7 +63,7 @@
                  <!-- Button to view the interview-->
                  <li class="flex justify-between items-center border-b border-dashed pb-2">
                     <span>{{ .Params.conversation }}</span>
-                    <a href="#interview" class="text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg font-semibold transition-all duration-300">[{{ $view }}]</a>
+                    <a href="#interview" class="text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg font-semibold transition-all duration-300">{{ $view }}</a>
                 </li>
                 {{ range .Params.toci }}
                 <li class="flex justify-between items-center border-b border-dashed pb-2">
@@ -76,42 +76,47 @@
 
         <!-- List Editor -->
         {{ if .Params.owner }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $owner }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.owner }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
+
         {{ if .Params.manager }}
             <div class=" p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $manager }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.manager }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -123,16 +128,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.editorinchief }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -144,16 +151,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.graphicteamleader }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -165,16 +174,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.editorialboard }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -186,16 +197,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.literaryeditor }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -207,16 +220,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.coverdesigner }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -228,16 +243,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.graphicteam }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -249,16 +266,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.layoutdesigner }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -270,16 +289,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.logodesigner }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
@@ -291,16 +312,18 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.photographer }}
                     <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
                         {{ if .image }}
                             {{ $image := resources.Get (printf "images/%s" .image) }}
                             {{ if $image }}
                                 <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ else }}
-                            <img src="avatar.png" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
                             {{ end }}
                         {{ end }}
-                        <p class="font-semibold">{{ .name }}</p>
+                        <p class="font-semibold mt-2">{{ .name }}</p>
                         <!-- <p class="text-gray-500">{{ .role }}</p> -->
+                        {{ if .url }}</a>{{ end }}
                     </div>
                     {{ end }}
                 </div>
