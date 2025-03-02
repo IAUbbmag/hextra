@@ -4,7 +4,7 @@
 {{- $copyrightSectionVisible := or (.Site.Params.footer.displayPoweredBy | default true) .Site.Params.footer.displayCopyright -}}
 {{- $footernote := (T "footernote") | default "Exploring the World of Technology and Artificial Intelligence" -}}
 {{- $copyright := (T "copyright") | default "© 2025 Bit & Byte Journal." -}}
-{{- $byteimg := resources.Get (printf "images/en-bin&byte.png") -}}
+{{- $byteimg := resources.Get (printf "images/en-bitandbyte.png") -}}
 {{- $follow := (T "followuson") | default "Follow us on: " | replaceRE "\\s+" " " -}}
 
 
@@ -32,7 +32,7 @@
         <div class="text-center flex flex-col md:flex-row space-y-10 md:space-y-0 md:space-x-10">
           <div>
             <h3 class="transform translate-x-8 ltr:-translate-x-8 whitespace-nowrap ">{{ $follow }}</h3>
-            <ul class="space-y-3 pt-6">
+            <ul class=" space-y-3 pt-6">
               <li class="group relative flex items-center">
                 <a href="https://www.linkedin.com/company/bbmag" class=" fill-[#4b5562] hover:fill-blue-500 flex items-center">
                   <svg class="size-10" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0,0,256,256">
@@ -66,9 +66,9 @@
             </ul>
           </div>
         </div>
-        <div class="pt-24">
-          <h2 class="text-lg font-semibold mb-2">{{ $footernote }}</h2>
-          <img src="{{ $byteimg.RelPermalink }}" alt="Bit & Byte Logo" 
+        <div class="pt-8">
+          <h2 class=" mb-4">{{ $footernote }}</h2>
+          <img class="" src="{{ $byteimg.RelPermalink }}" alt="Bit & Byte Logo" 
           style="max-width: 50%; height: 20;" />
           
         </div>
