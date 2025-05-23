@@ -1,14 +1,94 @@
 {{ define "main" }}
-  <div class='hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
-    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" true) }}
-    {{ partial "toc.html" . }}
+  <!-- ==================================================
+     Resource Imports
+     Loads CSS and JavaScript resources for styling and functionality.
+     Includes AOS for animations, Vue.js and jQuery for sliders, and custom home styles/scripts.
+  ================================================== -->
+  {{- $aoscss := resources.Get "css/feature/aos.css" }}
+  {{- $homecss := resources.Get "css/feature/home.css" }}
+  {{- $aosjs := resources.Get "js/feature/aos.js" }}
+  {{- $vue := resources.Get "js/feature/vue.min.js" }}
+  {{- $jquery := resources.Get "js/feature/jquery-3.6.0.min.js" }}
+  {{- $homejs := resources.Get "js/feature/home.js" }}
+
+  <!-- External font icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- CSS resources -->
+  <link rel="stylesheet" href="{{ $aoscss.RelPermalink }}">
+  <link rel="stylesheet" href="{{ $homecss.RelPermalink }}">
+
+  <!-- ==================================================
+     Main Content Wrapper
+     Contains the sidebar, main article, and all homepage sections.
+     Disables sidebar and placeholder for a clean homepage layout.
+  ================================================== -->
+  <div class="hx-w-full">
+    <!-- Sidebar (disabled for homepage) -->
+    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
+
+    <!-- Main article container -->
     <article class="hx-w-full hx-break-words hx-flex hx-min-h-[calc(100vh-var(--navbar-height))] hx-min-w-0 hx-justify-center hx-pb-8 hx-pr-[calc(env(safe-area-inset-right)-1.5rem)]">
-      <main class="hx-w-full hx-min-w-0 hx-max-w-6xl hx-px-6 hx-pt-4 md:hx-px-12">
-        {{ if .Title }}<h1 class="hx-text-center hx-mt-2 hx-text-4xl hx-font-bold hx-tracking-tight hx-text-slate-900 dark:hx-text-slate-100">{{ .Title }}</h1>{{ end }}
+      <main class="hx-w-full hx-min-w-0 hx-px-6 hx-pt-4 md:hx-px-12">
+        <!-- ==================================================
+           Page Title (Commented Out)
+           Optionally displays the page title if defined.
+        ================================================== -->
+        <!-- {{ if .Title }}
+          <h1 class="hx-text-center hx-mt-2 hx-text-4xl hx-font-bold hx-tracking-tight hx-text-slate-900 dark:hx-text-slate-100">{{ .Title }}</h1>
+        {{ end }} -->
+
+        <!-- ==================================================
+           Main Slider
+           Displays the primary slider (cool-slider) for the homepage.
+        ================================================== -->
+        {{ partial "mainslider.html" . }}
+
+        <!-- ==================================================
+           Page Content
+           Renders the main content defined in the page's markdown.
+        ================================================== -->
         <div class="content">
           {{ .Content }}
+        </div>
+
+        <!-- ==================================================
+           Team Staff Section
+           Displays the team member cards with animations.
+        ================================================== -->
+        {{ partial "teamstaff.html" . }}
+
+        <!-- ==================================================
+           Testimonials Slider
+           Displays the testimonials carousel with a centered container.
+        ================================================== -->
+        <div class="py-[200px]">
+          <div class="container mx-auto px-4">
+            {{ partial "testimonials-slider.html" . }}
+          </div>
+        </div>
+
+        <!-- ==================================================
+           LinkedIn Section
+           Displays the LinkedIn section with top/bottom margins.
+        ================================================== -->
+        <div class="mt-[100px] mb-[100px]">
+          {{ partial "linkedin-section.html" . }}
         </div>
       </main>
     </article>
   </div>
+
+  <!-- ==================================================
+     JavaScript Resources
+     Loads scripts for animations and slider functionality.
+     Initializes AOS for team staff animations.
+  ================================================== -->
+  <script src="{{ $aosjs.RelPermalink }}"></script>
+  <script>
+    AOS.init();
+  </script>
+  <script src="{{ $vue.RelPermalink }}"></script>
+  <script src="{{ $jquery.RelPermalink }}"></script>
+  <script src="{{ $homejs.RelPermalink }}"></script>
 {{ end }}
