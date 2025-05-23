@@ -567,3 +567,16 @@ body {
   color: #6b7280; /* text-gray-500 */
   margin: 0;
 }
+
+
+/* ==================================================
+   Content Below Slider Styles
+   Styles for the content section below the main slider (.content-below).
+   Provides a light background and padding for content separation.
+================================================== */
+.content-below {
+  width: 100%;
+  min-height: 30vh;
+  padding: 1.25rem;
+  background-color: #f3f4f6;
+}
