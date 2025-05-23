@@ -1,0 +1,31 @@
+<h3 class="text-center text-3xl font-bold mb-10">{{ .Params.testimonials.title }}</h3>
+<div class="carousel-wrap relative mx-auto">
+  <ul class="carousel">
+    {{ range $index, $testimonial := .Params.testimonials.members }}
+      <li class="items">
+        <div class="review-card text-center p-8 border-2 {{ if eq $index 0 }}border-blue-400{{ else if eq $index 1 }}border-purple-400{{ else }}border-orange-400{{ end }} bg-blue-100/50 backdrop-blur-md rounded-xl shadow-lg">
+          {{ with $testimonial.image | resources.Get }}
+            <img src="{{ .RelPermalink }}" alt="{{ $testimonial.name | default "تصویر" }}" class="w-[120px] h-[120px] border border-gray-200 object-cover mx-auto mb-2 rounded-full">
+          {{ else }}
+            <p class="text-center">تصویری ارائه نشده</p>
+          {{ end }}
+          <div class="review-author">
+            {{ with $testimonial.name }}
+              <span class="ra-author block text-xl font-semibold mb-1">{{ . }}</span>
+            {{ end }}
+            {{ with $testimonial.role }}
+              <span class="ra-role block text-xl text-gray-800 dark:text-gray-800 dark:[text-shadow:0_0_5px_rgba(255,255,255,0.8)] mb-4">{{ . }}</span>
+            {{ end }}
+          </div>
+          {{ with $testimonial.quote }}
+            <p class="text-gray-800 dark:text-gray-800 dark:[text-shadow:0_0_5px_rgba(255,255,255,0.8)]">{{ . }}</p>
+          {{ end }}
+        </div>
+      </li>
+    {{ end }}
+  </ul>
+  <span class="slider-controls absolute w-full top-1/2 transform -translate-y-1/2 text-center">
+    <a href="javascript:void(0);" id="prev" class="absolute left-[-80px] text-gray-600 hover:text-gray-800"><i class="material-icons text-5xl">chevron_left</i></a>
+    <a href="javascript:void(0);" id="next" class="absolute right-[-80px] text-gray-600 hover:text-gray-800"><i class="material-icons text-5xl">chevron_right</i></a>
+  </span>
+</div>
