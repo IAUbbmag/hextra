@@ -189,5 +189,92 @@ $(document).ready(function() {
     }
   });
 
+    /* ==================================================
+     Testimonials Slider (carousel-wrap)
+     Manages the testimonials slider using jQuery.
+     Handles card positioning (main, left, right, back) with transitions.
+     Includes auto-swap functionality and hover pause/resume.
+     Adds click handlers for next/prev navigation controls.
+  ================================================== */
+  var carousel = {
+    init() {
+      var items = $('.carousel > li');
+      var itemCount = items.length;
+      var currentIndex = 0;
+      var isAnimating = false;
+      var autoSwap;
+
+      function updateSlider() {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        items.removeClass('main-pos left-pos right-pos back-pos');
+
+        var leftIndex = (currentIndex - 1 + itemCount) % itemCount;
+        var rightIndex = (currentIndex + 1) % itemCount;
+
+        items.eq(currentIndex).addClass('main-pos');
+        items.eq(leftIndex).addClass('left-pos');
+        items.eq(rightIndex).addClass('right-pos');
+
+        items.each(function(index) {
+          if (index !== currentIndex && index !== leftIndex && index !== rightIndex) {
+            $(this).addClass('back-pos');
+          }
+        });
+
+        setTimeout(function() {
+          isAnimating = false;
+        }, 600);
+      }
+
+      items.each(function(index) {
+        if (index === 0) {
+          $(this).addClass('main-pos');
+        } else if (index === itemCount - 1) {
+          $(this).addClass('left-pos');
+        } else if (index === 1) {
+          $(this).addClass('right-pos');
+        } else {
+          $(this).addClass('back-pos');
+        }
+      });
+
+      function startAutoSwap() {
+        autoSwap = setInterval(function() {
+          if (!isAnimating) {
+            currentIndex = (currentIndex + 1) % itemCount;
+            updateSlider();
+          }
+        }, 5000);
+      }
+
+      startAutoSwap();
+
+      $('.carousel-wrap').hover(
+        function() {
+          clearInterval(autoSwap);
+        },
+        function() {
+          startAutoSwap();
+        }
+      );
+
+      $('#next').click(function() {
+        if (!isAnimating) {
+          currentIndex = (currentIndex + 1) % itemCount;
+          updateSlider();
+        }
+      });
+
+      $('#prev').click(function() {
+        if (!isAnimating) {
+          currentIndex = (currentIndex - 1 + itemCount) % itemCount;
+          updateSlider();
+        }
+      });
+    }
+  };
+  
   carousel.init();
 });
