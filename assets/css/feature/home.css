@@ -17,3 +17,277 @@ body {
   padding: 0;
   overflow: visible;
 }
+
+
+/* ==================================================
+   Main Slider Styles
+   Styles for the homepage main slider (.cool-slider), including slides, SVG holders, content, buttons, and controls.
+   Handles animations for slide transitions and extra elements.
+   Ensures z-index is below navbar (z-index: 50) for proper layering.
+   Includes responsive adjustments for smaller screens.
+================================================== */
+.cool-slider {
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+  position: relative;
+  z-index: 10; /* Below navbar (assumed z-index: 50) */
+}
+
+.cool-slider .slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: all 1s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cool-slider .svg-holder {
+  width: 600px;
+  height: 300px;
+  position: relative;
+  z-index: 5;
+  pointer-events: none;
+  transition: all 1s ease-in-out; /* Add transition for initial animation */
+}
+
+.cool-slider #slide-3 .svg-holder {
+  width: 1400px;
+  height: 375px;
+}
+
+.cool-slider .slide svg {
+  width: 600px;
+  height: 600px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+.cool-slider #slide-3 svg {
+  width: 1400px;
+  height: 375px;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cool-slider .content {
+  height: 300px;
+  width: 320px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -160px;
+  margin-top: -150px;
+  z-index: 15;
+  transition: all 1s ease-in-out;
+  pointer-events: none;
+}
+
+/* Hide content (title, info, button) in slide 3 */
+.cool-slider #slide-3 .content {
+  display: none;
+}
+
+.cool-slider .content .title {
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  margin-bottom: 0;
+}
+
+.cool-slider .content .info {
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.cool-slider .content .button {
+  float: left;
+  padding: 0.25rem 0.75rem;
+  background-color: #000;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 0.375rem;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  border: 2px solid #000;
+  transition: all 0.2s ease-in-out;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.cool-slider .content .button:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.cool-slider .slide img:not(.extra-element) {
+  position: absolute;
+  width: 300px;
+  top: 50%;
+  right: 50%;
+  margin-right: -450px;
+  margin-top: -150px;
+  z-index: 15;
+  transition: all 1s ease-in-out;
+}
+
+.cool-slider .slide-num {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  z-index: 15;
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: #d1d5db;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.cool-slider .slide-num:after {
+  content: '';
+  position: absolute;
+  height: 0.25rem;
+  width: 4.6875rem;
+  right: calc(100% + 0.9375rem);
+  top: 1.5rem;
+  background-color: #d1d5db;
+}
+
+.cool-slider .extra-elements-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1235px;
+  max-width: 100%;
+  height: 375px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 15;
+  padding: 0 0.625rem;
+}
+
+.cool-slider .extra-element {
+  position: relative;
+  width: 150px;
+  height: 375px;
+  z-index: 15;
+  margin: 0 0.375rem;
+  opacity: 0; /* Hidden by default */
+}
+
+/* Animation delays for extra elements */
+.cool-slider .delay-0 { animation-delay: 0ms; }
+.cool-slider .delay-200 { animation-delay: 200ms; }
+.cool-slider .delay-400 { animation-delay: 400ms; }
+.cool-slider .delay-600 { animation-delay: 600ms; }
+.cool-slider .delay-800 { animation-delay: 800ms; }
+.cool-slider .delay-1000 { animation-delay: 1000ms; }
+.cool-slider .delay-1200 { animation-delay: 1200ms; }
+.cool-slider .delay-1400 { animation-delay: 1400ms; }
+
+/* Shared animations */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(100px) rotateX(20deg); }
+  to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+}
+
+@keyframes fadeOutUp {
+  from { opacity: 1; transform: translateY(0) rotateX(0deg); }
+  to { opacity: 0; transform: translateY(-100px) rotateX(-20deg); }
+}
+
+.cool-slider .fadeInUp {
+  animation: fadeInUp 1.5s ease forwards;
+}
+
+.cool-slider .fadeOutUp {
+  animation: fadeOutUp 1.5s ease forwards;
+}
+
+.cool-slider .hidden {
+  opacity: 0;
+  pointer-events: none;
+  display: none;
+}
+
+.cool-slider .out-left {
+  transform: translateX(-350px) !important;
+  opacity: 0 !important;
+}
+
+.cool-slider .out-left .content,
+.cool-slider .out-left img:not(.extra-element) {
+  transform: translateX(-150px) !important;
+}
+
+.cool-slider .out-right {
+  transform: translateX(350px) !important;
+  opacity: 0 !important;
+}
+
+.cool-slider .out-right .content,
+.cool-slider .out-right img:not(.extra-element) {
+  transform: translateX(150px) !important;
+}
+
+.cool-slider .in-left {
+  transform: translateX(-350px) !important;
+  opacity: 0 !important;
+  display: block !important;
+}
+
+.cool-slider .in-left .content,
+.cool-slider .in-left img:not(.extra-element) {
+  transform: translateX(-150px) !important;
+}
+
+.cool-slider .in-right {
+  transform: translateX(350px) !important;
+  opacity: 0 !important;
+  display: block !important;
+}
+
+.cool-slider .in-right .content {
+  transform: translateX(150px) !important;
+}
+
+.cool-slider .in-right img:not(.extra-element) {
+  transform: translateX(150px) !important;
+}
+
+.cool-slider .in-right .svg-holder,
+.cool-slider .in-right .slide-num {
+  transform: translateX(350px) !important; /* Match slide transform */
+}
+
+.cool-slider .out-left .slide-num,
+.cool-slider .out-right .slide-num,
+.cool-slider .in-left .slide-num,
+.cool-slider .in-right .slide-num {
+  opacity: 0;
+}
+
+.cool-slider .slide-control.left,
+.cool-slider .slide-control.right {
+  position: absolute;
+  top: 0;
+  width: 20%;
+  height: 100%;
+  z-index: 20;
+  cursor: pointer;
+}
+
+.cool-slider .slide-control.left {
+  left: 0;
+}
+
+.cool-slider .slide-control.right {
+  right: 0;
+}
