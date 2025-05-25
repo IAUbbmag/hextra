@@ -1,11 +1,39 @@
 {{- $title := .Get "title" | default "" -}}
-{{- $closed := eq (.Get "closed") "true" | default false -}}
+{{- $closed := ne (.Get "closed") "false" -}}
+{{- $detailsID := .Get "id" | default ($title | urlize) -}}
 
-<details class="last-of-type:hx-mb-0 hx-rounded-lg hx-bg-neutral-50 dark:hx-bg-neutral-800 hx-p-2 hx-mt-4 hx-group" {{ if not $closed }}open{{ end }}>
-  <summary class="hx-flex hx-items-center hx-cursor-pointer hx-select-none hx-list-none hx-p-1 hx-rounded hx-transition-colors hover:hx-bg-gray-100 dark:hover:hx-bg-neutral-800 before:hx-mr-1 before:hx-inline-block before:hx-transition-transform before:hx-content-[''] dark:before:hx-invert rtl:before:hx-rotate-180 group-open:before:hx-rotate-90">
+<details 
+  id="{{ $detailsID }}"
+  class="custom-details last-of-type:hx-mb-0 hx-rounded-lg hx-bg-neutral-50 dark:hx-bg-neutral-800 hx-p-2 hx-mt-4 hx-group" 
+  {{ if not $closed }}open{{ end }}
+>
+  <summary 
+    class="details-summary hx-flex hx-items-center hx-cursor-pointer hx-select-none hx-list-none hx-p-1 hx-rounded hx-transition-colors hover:hx-bg-gray-100 dark:hover:hx-bg-neutral-800 before:hx-mr-1 before:hx-inline-block before:hx-transition-transform before:hx-content-[''] dark:before:hx-invert rtl:before:hx-rotate-180 group-open:before:hx-rotate-90"
+    onclick="window.location.hash = '#{{ $detailsID }}'"
+  >
     <strong class="hx-text-lg">{{ $title | markdownify }}</strong>
   </summary>
-  <div class="hx-p-2 hx-overflow-hidden">
+  <div class="details-content hx-p-2 hx-overflow-hidden">
     {{ .InnerDeindent | markdownify }}
   </div>
 </details>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const hash = window.location.hash.substring(1);
+  if(hash) {
+    const targetDetails = document.getElementById(hash);
+    if(targetDetails && targetDetails.tagName === 'DETAILS') {
+      targetDetails.open = true;
+      targetDetails.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+
+  window.addEventListener('hashchange', () => {
+    const newHash = window.location.hash.substring(1);
+    document.querySelectorAll('details').forEach(d => d.open = false);
+    const newTarget = document.getElementById(newHash);
+    if(newTarget) newTarget.open = true;
+  });
+});
+</script>
