@@ -22,7 +22,7 @@
              {{ with resources.Get .image }}
                <img src="{{ .RelPermalink }}" alt="{{ $slide.title }}" class="slide-image">
              {{ else }}
-               <p>تصویر یافت نشد: {{ .image }}</p>
+               <p>image not found: {{ .image }}</p>
              {{ end }}
            {{ else if .images }}
              <div class="extra-elements-container">
