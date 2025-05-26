@@ -24,7 +24,7 @@ body {
    Styles for the homepage main slider (.cool-slider), including slides, SVG holders, content, buttons, and controls.
    Handles animations for slide transitions and extra elements.
    Ensures z-index is below navbar (z-index: 50) for proper layering.
-   Includes responsive adjustments for smaller screens.
+   Includes enhanced responsive adjustments for mobile and small screens.
 ================================================== */
 .cool-slider {
   width: 100%;
@@ -42,6 +42,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .cool-slider .svg-holder {
@@ -50,7 +51,7 @@ body {
   position: relative;
   z-index: 5;
   pointer-events: none;
-  transition: all 1s ease-in-out; /* Add transition for initial animation */
+  transition: all 1s ease-in-out;
 }
 
 .cool-slider #slide-3 .svg-holder {
@@ -79,14 +80,13 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -160px;
-  margin-top: -150px;
+  transform: translate(-50%, -50%);
   z-index: 15;
   transition: all 1s ease-in-out;
   pointer-events: none;
+  text-align: center;
 }
 
-/* Hide content (title, info, button) in slide 3 */
 .cool-slider #slide-3 .content {
   display: none;
 }
@@ -97,15 +97,19 @@ body {
   font-size: 2.25rem;
   line-height: 2.5rem;
   margin-bottom: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cool-slider .content .info {
   font-weight: 700;
   font-size: 1.125rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cool-slider .content .button {
-  float: left;
+  display: inline-block;
   padding: 0.25rem 0.75rem;
   background-color: #000;
   color: #fff;
@@ -179,7 +183,7 @@ body {
   height: 375px;
   z-index: 15;
   margin: 0 0.375rem;
-  opacity: 0; /* Hidden by default */
+  opacity: 0;
 }
 
 /* Animation delays for extra elements */
@@ -264,7 +268,7 @@ body {
 
 .cool-slider .in-right .svg-holder,
 .cool-slider .in-right .slide-num {
-  transform: translateX(350px) !important; /* Match slide transform */
+  transform: translateX(350px) !important;
 }
 
 .cool-slider .out-left .slide-num,
@@ -290,6 +294,198 @@ body {
 
 .cool-slider .slide-control.right {
   right: 0;
+}
+
+/* Responsive styles for main slider */
+@media (max-width: 768px) {
+  .cool-slider {
+    height: 65vh; /* Slightly increase height to accommodate content */
+  }
+
+  .cool-slider .slide {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .cool-slider .svg-holder {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .cool-slider .slide svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  .cool-slider #slide-3 .svg-holder,
+  .cool-slider #slide-3 svg {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cool-slider .content {
+    width: 90%;
+    max-width: 300px;
+    height: auto;
+    top: 40%; /* Move content higher */
+    transform: translate(-50%, 0);
+    padding: 10px;
+    z-index: 20;
+  }
+
+  .cool-slider .content .title {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .cool-slider .content .info {
+    font-size: 0.875rem;
+  }
+
+  .cool-slider .content .button {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .cool-slider .slide img:not(.extra-element) {
+    width: 200px;
+    max-width: 100%;
+    right: auto;
+    left: 50%;
+    margin-right: 0;
+    margin-top: 0;
+    top: 3%; /* Move image higher */
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .cool-slider .slide-num {
+    font-size: 1rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .cool-slider .slide-num:after {
+    width: 3rem;
+    top: 0.75rem;
+  }
+
+  .cool-slider .extra-elements-container {
+    width: 100%;
+    max-width: 90vw;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0 5px;
+  }
+
+  .cool-slider #slide-3 .extra-elements-container {
+    flex-wrap: nowrap; /* Prevent elements from wrapping to next line */
+    justify-content: space-between; /* Distribute elements evenly */
+    padding: 0 1px; /* Reduced padding */
+  }
+
+  .cool-slider .extra-element {
+    width: calc((100% - 20px) / 4);
+    height: auto;
+    margin: 5px;
+  }
+
+  .cool-slider #slide-3 .extra-element {
+    width: calc((100% - 14px) / 8); /* 8 elements with reduced spacing */
+    height: auto;
+    margin: 0 1.75px; /* Reduced margin for closer elements */
+  }
+
+  .cool-slider .slide-control.left,
+  .cool-slider .slide-control.right {
+    width: 15%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cool-slider {
+    height: 60vh; /* Adjust height for smaller screens */
+  }
+
+  .cool-slider .svg-holder {
+    max-width: 300px;
+  }
+
+  .cool-slider .slide svg {
+    max-width: 300px;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cool-slider #slide-3 .svg-holder,
+  .cool-slider #slide-3 svg {
+    max-width: 400px;
+  }
+
+  .cool-slider .content {
+    max-width: 250px;
+    top: 35%; /* Move content even higher */
+  }
+
+  .cool-slider .content .title {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
+
+  .cool-slider .content .info {
+    font-size: 0.75rem;
+  }
+
+  .cool-slider .content .button {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .cool-slider .slide img:not(.extra-element) {
+    width: 150px;
+    top: 2%; /* Move image higher */
+  }
+
+  .cool-slider .slide-num {
+    font-size: 0.875rem;
+    bottom: 0.3rem;
+    left: 0.3rem;
+  }
+
+  .cool-slider .slide-num:after {
+    width: 2rem;
+    top: 0.5rem;
+  }
+
+  .cool-slider .extra-elements-container {
+    width: 100%;
+    max-width: 90vw;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0 5px;
+  }
+
+  .cool-slider #slide-3 .extra-elements-container {
+    flex-wrap: nowrap; /* Prevent elements from wrapping */
+    justify-content: space-between;
+    padding: 0 0.5px; /* Further reduced padding */
+  }
+
+  .cool-slider .extra-element {
+    width: calc((100% - 15px) / 3);
+    height: auto;
+    margin: 5px;
+  }
+
+  .cool-slider #slide-3 .extra-element {
+    width: calc((100% - 10px) / 8); /* 8 elements with tighter spacing */
+    height: auto;
+    margin: 0 1.25px; /* Even closer */
+  }
 }
 
 
