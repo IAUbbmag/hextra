@@ -1,19 +1,19 @@
 <div class="py-12 text-center mt-20">
   <!-- Section title -->
-  <h2 class="text-center text-3xl font-bold mb-10">{{ .Params.teamstaff.title | default "Team Staff" }}</h2>
+  <h2 class="text-3xl font-bold mb-10">{{ .Params.teamstaff.title | default "Team Staff" }}</h2>
 
   <!-- Top row -->
-  <div class="relative flex flex-wrap justify-center gap-10 mb-16">
+  <div class="flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-10 mb-16 mx-auto max-w-full">
     {{ range where .Params.teamstaff.members "row" "top" }}
       {{ $image := resources.Get (printf "images/%s" .image) }}
       {{ if $image }}
-        <a href="{{ .url | relURL }}" class="group relative team-card team-card-top" data-aos="fade-up" data-aos-duration="500" data-aos-delay="{{ .aos_delay }}">
-          <div class="relative w-[350px] h-[400px] bg-[#f0f0ea] rounded-[30px] shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2">
+        <a href="{{ .url | relURL }}" class="group team-card team-card-top" data-aos="fade-up" data-aos-duration="500" data-aos-delay="{{ .aos_delay }}">
+          <div class="relative w-[140px] h-[160px] max-w-[45vw] sm:w-[200px] sm:h-[229px] md:w-[350px] md:h-[400px] bg-[#f0f0ea] rounded-[30px] transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 box-border">
             <img src="{{ $image.RelPermalink }}" alt="{{ .name }}"
               class="w-full h-full object-cover rounded-[30px]">
-            <div class="text-area absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] bg-white bg-opacity-75 rounded-[20px] px-4 py-3">
-              <h3 class="text-lg font-semibold">{{ .name }}</h3>
-              <p class="text-gray-500">{{ .role }}</p>
+            <div class="text-area absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 w-[90%] bg-white bg-opacity-75 rounded-[20px] px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-3">
+              <h3 class="text-[12px] sm:text-base md:text-lg font-semibold">{{ .name }}</h3>
+              <p class="text-[10px] sm:text-sm md:text-gray-500">{{ .role }}</p>
             </div>
           </div>
         </a>
@@ -22,17 +22,17 @@
   </div>
 
   <!-- Bottom row -->
-  <div class="relative flex flex-wrap justify-center gap-10 mt-40">
+  <div class="flex flex-wrap justify-center gap-2 sm:gap-4 md:gap-10 mt-40 mx-auto max-w-full">
     {{ range where .Params.teamstaff.members "row" "bottom" }}
       {{ $image := resources.Get (printf "images/%s" .image) }}
       {{ if $image }}
-        <a href="{{ .url | relURL }}" class="group relative team-card team-card-bottom" data-aos="fade-up" data-aos-duration="500" data-aos-delay="{{ .aos_delay }}">
-          <div class="relative w-[250px] h-[300px] bg-[#f0f0ea] rounded-[30px] shadow-lg transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2">
+        <a href="{{ .url | relURL }}" class="group team-card team-card-bottom" data-aos="fade-up" data-aos-duration="500" data-aos-delay="{{ .aos_delay }}">
+          <div class="relative w-[110px] h-[132px] max-w-[35vw] sm:w-[160px] sm:h-[192px] md:w-[250px] md:h-[300px] bg-[#f0f0ea] rounded-[30px] transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 box-border">
             <img src="{{ $image.RelPermalink }}" alt="{{ .name }}"
               class="w-full h-full object-cover rounded-[30px]">
-            <div class="text-area absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] bg-white bg-opacity-75 rounded-[20px] px-4 py-3">
-              <h3 class="text-lg font-semibold">{{ .name }}</h3>
-              <p class="text-gray-500">{{ .role }}</p>
+            <div class="text-area absolute bottom-2 sm:bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 w-[90%] bg-white bg-opacity-75 rounded-[20px] px-2 py-1 sm:px-3 sm:py-2 md:px-4 md:py-3">
+              <h3 class="text-[10px] sm:text-base md:text-lg font-semibold">{{ .name }}</h3>
+              <p class="text-[8px] sm:text-sm md:text-gray-500">{{ .role }}</p>
             </div>
           </div>
         </a>

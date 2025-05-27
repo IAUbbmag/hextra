@@ -24,7 +24,7 @@ body {
    Styles for the homepage main slider (.cool-slider), including slides, SVG holders, content, buttons, and controls.
    Handles animations for slide transitions and extra elements.
    Ensures z-index is below navbar (z-index: 50) for proper layering.
-   Includes responsive adjustments for smaller screens.
+   Includes enhanced responsive adjustments for mobile and small screens.
 ================================================== */
 .cool-slider {
   width: 100%;
@@ -42,6 +42,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .cool-slider .svg-holder {
@@ -50,7 +51,7 @@ body {
   position: relative;
   z-index: 5;
   pointer-events: none;
-  transition: all 1s ease-in-out; /* Add transition for initial animation */
+  transition: all 1s ease-in-out;
 }
 
 .cool-slider #slide-3 .svg-holder {
@@ -79,14 +80,13 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -160px;
-  margin-top: -150px;
+  transform: translate(-50%, -50%);
   z-index: 15;
   transition: all 1s ease-in-out;
   pointer-events: none;
+  text-align: center;
 }
 
-/* Hide content (title, info, button) in slide 3 */
 .cool-slider #slide-3 .content {
   display: none;
 }
@@ -97,15 +97,19 @@ body {
   font-size: 2.25rem;
   line-height: 2.5rem;
   margin-bottom: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cool-slider .content .info {
   font-weight: 700;
   font-size: 1.125rem;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .cool-slider .content .button {
-  float: left;
+  display: inline-block;
   padding: 0.25rem 0.75rem;
   background-color: #000;
   color: #fff;
@@ -179,7 +183,7 @@ body {
   height: 375px;
   z-index: 15;
   margin: 0 0.375rem;
-  opacity: 0; /* Hidden by default */
+  opacity: 0;
 }
 
 /* Animation delays for extra elements */
@@ -264,7 +268,7 @@ body {
 
 .cool-slider .in-right .svg-holder,
 .cool-slider .in-right .slide-num {
-  transform: translateX(350px) !important; /* Match slide transform */
+  transform: translateX(350px) !important;
 }
 
 .cool-slider .out-left .slide-num,
@@ -292,96 +296,204 @@ body {
   right: 0;
 }
 
+/* Responsive styles for main slider */
+@media (max-width: 768px) {
+  .cool-slider {
+    height: 65vh; /* Slightly increase height to accommodate content */
+  }
+
+  .cool-slider .slide {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .cool-slider .svg-holder {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .cool-slider .slide svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  .cool-slider #slide-3 .svg-holder,
+  .cool-slider #slide-3 svg {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cool-slider .content {
+    width: 90%;
+    max-width: 300px;
+    height: auto;
+    top: 40%; /* Move content higher */
+    transform: translate(-50%, 0);
+    padding: 10px;
+    z-index: 20;
+  }
+
+  .cool-slider .content .title {
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+  }
+
+  .cool-slider .content .info {
+    font-size: 0.875rem;
+  }
+
+  .cool-slider .content .button {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .cool-slider .slide img:not(.extra-element) {
+    width: 200px;
+    max-width: 100%;
+    right: auto;
+    left: 50%;
+    margin-right: 0;
+    margin-top: 0;
+    top: 3%; /* Move image higher */
+    transform: translateX(-50%);
+    z-index: 10;
+  }
+
+  .cool-slider .slide-num {
+    font-size: 1rem;
+    bottom: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .cool-slider .slide-num:after {
+    width: 3rem;
+    top: 0.75rem;
+  }
+
+  .cool-slider .extra-elements-container {
+    width: 100%;
+    max-width: 90vw;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0 5px;
+  }
+
+  .cool-slider #slide-3 .extra-elements-container {
+    flex-wrap: nowrap; /* Prevent elements from wrapping to next line */
+    justify-content: space-between; /* Distribute elements evenly */
+    padding: 0 1px; /* Reduced padding */
+  }
+
+  .cool-slider .extra-element {
+    width: calc((100% - 20px) / 4);
+    height: auto;
+    margin: 5px;
+  }
+
+  .cool-slider #slide-3 .extra-element {
+    width: calc((100% - 14px) / 8); /* 8 elements with reduced spacing */
+    height: auto;
+    margin: 0 1.75px; /* Reduced margin for closer elements */
+  }
+
+  .cool-slider .slide-control.left,
+  .cool-slider .slide-control.right {
+    width: 15%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cool-slider {
+    height: 60vh; /* Adjust height for smaller screens */
+  }
+
+  .cool-slider .svg-holder {
+    max-width: 300px;
+  }
+
+  .cool-slider .slide svg {
+    max-width: 300px;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .cool-slider #slide-3 .svg-holder,
+  .cool-slider #slide-3 svg {
+    max-width: 400px;
+  }
+
+  .cool-slider .content {
+    max-width: 250px;
+    top: 35%; /* Move content even higher */
+  }
+
+  .cool-slider .content .title {
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+  }
+
+  .cool-slider .content .info {
+    font-size: 0.75rem;
+  }
+
+  .cool-slider .content .button {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .cool-slider .slide img:not(.extra-element) {
+    width: 150px;
+    top: 2%; /* Move image higher */
+  }
+
+  .cool-slider .slide-num {
+    font-size: 0.875rem;
+    bottom: 0.3rem;
+    left: 0.3rem;
+  }
+
+  .cool-slider .slide-num:after {
+    width: 2rem;
+    top: 0.5rem;
+  }
+
+  .cool-slider .extra-elements-container {
+    width: 100%;
+    max-width: 90vw;
+    height: auto;
+    flex-wrap: wrap;
+    padding: 0 5px;
+  }
+
+  .cool-slider #slide-3 .extra-elements-container {
+    flex-wrap: nowrap; /* Prevent elements from wrapping */
+    justify-content: space-between;
+    padding: 0 0.5px; /* Further reduced padding */
+  }
+
+  .cool-slider .extra-element {
+    width: calc((100% - 15px) / 3);
+    height: auto;
+    margin: 5px;
+  }
+
+  .cool-slider #slide-3 .extra-element {
+    width: calc((100% - 10px) / 8); /* 8 elements with tighter spacing */
+    height: auto;
+    margin: 0 1.25px; /* Even closer */
+  }
+}
+
 
 /* ==================================================
    Testimonials Slider Styles
-   Styles for the homepage testimonials slider (.carousel-wrap), including review cards and slider controls.
-   Handles card positioning (main, left, right, back) with opacity and scale transitions.
-   Uses backdrop blur and shadows for modern card design.
-   Includes responsive styles for mobile and small screens.
+   Minimal styles for JavaScript-controlled positioning and animations.
+   All other styles are moved to Tailwind classes in HTML.
 ================================================== */
-.carousel-wrap {
-  max-width: 100%;
-  height: 400px;
-  position: relative;
-  margin: 0 auto;
-  z-index: 10; /* Below navbar */
-  padding: 0 16px; /* Add padding for mobile */
-}
-
-.carousel-wrap .carousel {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.carousel-wrap .carousel > li {
-  width: 700px;
-  height: 400px;
-  position: absolute;
-  top: 0;
-  transition: all 0.6s ease-in-out;
-}
-
-.carousel-wrap .review-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-width: 2px;
-  background-color: rgba(191, 219, 254, 0.5); /* bg-blue-100/50 */
-  backdrop-filter: blur(4px); /* backdrop-blur-md */
-  border-radius: 0.75rem; /* rounded-xl */
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-  padding: 32px; /* Default padding */
-  overflow: hidden; /* Prevent text overflow */
-}
-
-.carousel-wrap .carousel > li:nth-child(1) .review-card { border-color: #3b82f6; } /* border-blue-400 */
-.carousel-wrap .carousel > li:nth-child(2) .review-card { border-color: #a855f7; } /* border-purple-400 */
-.carousel-wrap .carousel > li:nth-child(3) .review-card { border-color: #4ade80; } /* border-green-400 */
-.carousel-wrap .carousel > li:nth-child(n+4) .review-card { border-color: #f97316; } /* border-orange-400 */
-
-.carousel-wrap .review-card img {
-  width: 120px;
-  height: 120px;
-  border: 1px solid #e5e7eb; /* border-gray-200 */
-  object-fit: cover;
-  margin: 0 auto 0.5rem;
-  border-radius: 9999px; /* rounded-full */
-}
-
-.carousel-wrap .ra-author {
-  display: block;
-  font-size: 1.25rem; /* text-xl, 20px */
-  font-weight: 600; /* font-semibold */
-  margin-bottom: 0.25rem;
-  overflow-wrap: break-word; /* Break long words */
-  word-break: break-word; /* Ensure text wraps */
-}
-
-.carousel-wrap .ra-role,
-.carousel-wrap .review-content p {
-  display: block;
-  font-size: 1.25rem; /* text-xl, 20px */
-  color: #1f2937; /* text-gray-800 */
-  margin-bottom: 1rem;
-  overflow-wrap: break-word; /* Break long words */
-  word-break: break-word; /* Ensure text wraps */
-}
-
-.carousel-wrap .ra-role.dark,
-.carousel-wrap .review-content p.dark {
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
-}
-
-.carousel-wrap .review-content {
-  flex-grow: 1;
-  display: flex;
-  align-items: flex-start;
-  padding-top: 1rem;
-}
-
 .carousel-wrap .main-pos {
   left: 50%;
   transform: translateX(-50%);
@@ -415,53 +527,7 @@ body {
   scale: 0.7;
 }
 
-.carousel-wrap .slider-controls {
-  z-index: 20; /* Above cards */
-}
-
-.carousel-wrap .slider-controls a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-wrap .slider-controls .material-icons {
-  font-size: 48px; /* Default size */
-  transition: color 0.2s ease-in-out;
-}
-
-/* Responsive styles for testimonials slider */
 @media (max-width: 768px) {
-  .carousel-wrap {
-    height: auto; /* Allow dynamic height */
-    padding: 0 8px; /* Smaller padding */
-  }
-
-  .carousel-wrap .carousel > li {
-    width: 80%; /* Smaller width for better fit */
-    max-width: 400px; /* Cap width */
-    height: auto; /* Dynamic height for content */
-    min-height: 300px; /* Minimum height */
-  }
-
-  .carousel-wrap .review-card {
-    padding: 16px; /* Reduced padding */
-  }
-
-  .carousel-wrap .review-card img {
-    width: 80px; /* Smaller image */
-    height: 80px;
-  }
-
-  .carousel-wrap .ra-author {
-    font-size: 1rem; /* 16px */
-  }
-
-  .carousel-wrap .ra-role,
-  .carousel-wrap .review-content p {
-    font-size: 0.875rem; /* 14px */
-  }
-
   .carousel-wrap .left-pos,
   .carousel-wrap .right-pos {
     left: 50%;
@@ -475,99 +541,18 @@ body {
     opacity: 0.05;
     scale: 0.65;
   }
-
-  .carousel-wrap .slider-controls a#prev {
-    left: 10px; /* Move inside container */
-  }
-
-  .carousel-wrap .slider-controls a#next {
-    right: 10px; /* Move inside container */
-  }
-
-  .carousel-wrap .slider-controls .material-icons {
-    font-size: 32px; /* Smaller icons */
-  }
 }
-
-@media (max-width: 480px) {
-  .carousel-wrap .carousel > li {
-    width: 90%; /* Slightly wider for very small screens */
-    max-width: 300px;
-  }
-
-  .carousel-wrap .review-card {
-    padding: 12px; /* Even smaller padding */
-  }
-
-  .carousel-wrap .review-card img {
-    width: 60px; /* Even smaller image */
-    height: 60px;
-  }
-
-  .carousel-wrap .ra-author {
-    font-size: 0.875rem; /* 14px */
-  }
-
-  .carousel-wrap .ra-role,
-  .carousel-wrap .review-content p {
-    font-size: 0.75rem; /* 12px */
-  }
-}
-
 
 /* ==================================================
    Team Staff Styles
-   Styles for the homepage team section (.team-card), including top and bottom cards with images and text overlays.
+   Styles for the homepage team section (.team-card), including top and bottom row cards with images and text overlays.
    Uses drop-shadow for depth and semi-transparent text area for readability.
-   Includes responsive styles to adjust card sizes on smaller screens.
+   Includes responsive styles to dynamically scale card sizes and text on smaller screens.
+   Forces two items per row (top and bottom) in mobile view with smaller sizes and high specificity.
 ================================================== */
 .team-card {
-  position: relative;
-  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 10px 20px rgba(40, 40, 20, 0.1));
 }
-
-.team-card-top > div {
-  width: 350px;
-  height: 400px;
-}
-
-.team-card-bottom > div {
-  width: 250px;
-  height: 300px;
-}
-
-.team-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 30px;
-}
-
-.team-card .text-area {
-  position: absolute;
-  bottom: 1rem; /* 16px */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 20px;
-  padding: 12px 16px;
-  text-align: center;
-  z-index: 1;
-}
-
-.team-card .text-area h3 {
-  font-size: 1.125rem; /* 18px */
-  font-weight: 600;
-  margin: 0;
-}
-
-.team-card .text-area p {
-  font-size: 0.875rem; /* 14px */
-  color: #6b7280; /* text-gray-500 */
-  margin: 0;
-}
-
 
 /* ==================================================
    Content Below Slider Styles
@@ -612,44 +597,6 @@ body {
     max-width: 1400px;
     height: auto;
   }
-  .carousel-wrap {
-    height: 400px;
-  }
-  .carousel-wrap .carousel > li {
-    width: 90%;
-    max-width: 700px;
-    height: 400px;
-  }
-  .carousel-wrap .left-pos,
-  .carousel-wrap .right-pos {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    opacity: 0.2;
-    scale: 0.8;
-  }
-  .carousel-wrap .back-pos {
-    opacity: 0.05;
-    scale: 0.65;
-  }
-  .team-card-top > div {
-    width: 300px;
-    height: 343px; /* Maintain 350:400 ratio (400/350 * 300 ≈ 343) */
-    max-width: calc(100% - 1rem);
-  }
-  .team-card-bottom > div {
-    width: 200px;
-    height: 240px; /* Maintain 250:300 ratio (300/250 * 200 = 240) */
-    max-width: calc(100% - 1rem);
-  }
-  .team-card .text-area {
-    bottom: 0.75rem; /* 12px */
-    padding: 8px 12px;
-  }
-  .team-card .text-area h3 {
-    font-size: 1rem; /* 16px */
-  }
-  .team-card .text-area p {
-    font-size: 0.75rem; /* 12px */
-  }
+
+  
 }
