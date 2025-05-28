@@ -10,6 +10,8 @@
   <title>
     {{- if .IsHome -}}
       {{ .Site.Title -}}
+    {{ else if .Params.fullname -}}
+      {{ .Params.fullname }} – {{ .Site.Title }}
     {{ else -}}
       {{ with .Title }}{{ . }} – {{ end -}}
       {{ .Site.Title -}}
