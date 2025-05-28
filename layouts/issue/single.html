@@ -17,6 +17,9 @@
 {{- $view := (T "view") | default "View" -}}
 {{- $dll := (T "dll") | default "Download" -}}
 {{- $close := (T "close") | default "Close" -}}
+
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
+
 <div class='container p-6 grid grid-cols-1 md:grid-cols-3 gap-6 hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
    
     {{ partial "toc.html" . }}
