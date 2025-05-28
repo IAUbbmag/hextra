@@ -9,7 +9,8 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {{ range .Pages }}
           <a href="{{ .RelPermalink }}" class="shadow-md rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition dark:hx-text-neutral-200 dark:hover:hx-text-neutral-50">
-              <img src="{{ .Params.image | relURL }}" alt="{{ .Params.fullname }}" class="w-24 h-24 rounded-full border-2 border-blue-400">
+              
+            <img src="{{ .Params.image | resources.Get }}" alt="{{ .Params.fullname }}" class="w-24 h-24 rounded-full border-2 border-blue-400">
               {{ if .Params.fullname }}<h2 class="text-xl font-bold mt-4">{{ .Params.fullname }}</h2>{{ end }}
               {{ if .Params.fullname }}<span class="text-gray-500 text-sm mt-1">{{ .Params.role }}</span>{{ end }}
           </a>

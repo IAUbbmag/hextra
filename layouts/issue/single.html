@@ -17,6 +17,9 @@
 {{- $view := (T "view") | default "View" -}}
 {{- $dll := (T "dll") | default "Download" -}}
 {{- $close := (T "close") | default "Close" -}}
+
+{{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
+
 <div class='container p-6 grid grid-cols-1 md:grid-cols-3 gap-6 hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
    
     {{ partial "toc.html" . }}
@@ -89,8 +92,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -116,8 +119,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -143,8 +146,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -170,8 +173,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -197,8 +200,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -224,8 +227,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -251,8 +254,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -278,8 +281,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -305,8 +308,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -332,8 +335,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
@@ -359,8 +362,8 @@
                             {{ $staff := site.GetPage .profile }}
                             {{ if $staff }}
                             <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                                {{ with $staff.Params.image }}
-                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
                                 {{ else }}
                                     <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
                                 {{ end }}
