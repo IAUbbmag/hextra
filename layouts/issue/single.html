@@ -18,7 +18,8 @@
 {{- $dll := (T "dll") | default "Download" -}}
 {{- $close := (T "close") | default "Close" -}}
 <div class='container p-6 grid grid-cols-1 md:grid-cols-3 gap-6 hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
-    
+   
+    {{ partial "toc.html" . }}
     <!-- Poster With download button-->
     <div class="md:col-span-1">
         <div class="sticky top-5 md:top-20 transition-all duration-300 ease-in-out">
@@ -61,10 +62,14 @@
             <h2 class="text-xl font-semibold">{{ $toc1 }}</h2>
             <ul class="mt-2 space-y-2">
                  <!-- Button to view the interview-->
-                 <li class="flex justify-between items-center border-b border-dashed pb-2">
-                    <span>{{ .Params.conversation }}</span>
-                    <a href="#interview" class="text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg font-semibold transition-all duration-300">{{ $view }}</a>
-                </li>
+                 {{ if .Params.interview }}
+                    <li class="flex justify-between items-center border-b border-dashed pb-2">
+                        <span>{{ .Params.interview.title }}</span>
+                        <a href="{{ .Params.interview.url | relURL }}" class="text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg font-semibold transition-all duration-300">
+                            [{{ $view }}]
+                        </a>
+                    </li>
+                {{ end }}
                 {{ range .Params.toci }}
                 <li class="flex justify-between items-center border-b border-dashed pb-2">
                     <span>{{ .title }}</span>
@@ -80,251 +85,294 @@
                 <h2 class="text-2xl font-bold">{{ $owner }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.owner }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $owner }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
-
         {{ if .Params.manager }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $manager }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.manager }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $manager }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.editorinchief }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $editorinchief }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.editorinchief }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $editorinchief }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.graphicteamleader }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $graphicteamleader }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.graphicteamleader }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $graphicteamleader }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.editorialboard }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $editorialboard }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.editorialboard }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $editorialboard }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.literaryeditor }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $literaryeditor }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.literaryeditor }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $literaryeditor }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.coverdesigner }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $coverdesigner }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.coverdesigner }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $coverdesigner }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.graphicteam }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $graphicteam }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.graphicteam }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $graphicteam }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.layoutdesigner }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $layoutdesigner }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.layoutdesigner }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $layoutdesigner }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.logodesigner }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $logodesigner }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.logodesigner }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $logodesigner }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
         {{ end }}
         {{ if .Params.photographer }}
-            <div class=" p-4 rounded-lg shadow">
+            <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $photographer }}:</h2>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
                     {{ range .Params.photographer }}
-                    <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
-                        {{ if .url }}<a href="{{ .url | relURL }}" class="block">{{ end }}
-                        {{ if .image }}
-                            {{ $image := resources.Get (printf "images/%s" .image) }}
-                            {{ if $image }}
-                                <img src="{{ $image.RelPermalink }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image }}
+                                    <img src="{{ . | relURL }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
                             {{ else }}
-                                <img src="{{ "images/avatar.png" | relURL }}" alt="{{ .name }}'s Photo" class="rounded-full mx-auto">
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
                             {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $photographer }}` وجود ندارد.</p>
                         {{ end }}
-                        <p class="font-semibold mt-2">{{ .name }}</p>
-                        <!-- <p class="text-gray-500">{{ .role }}</p> -->
-                        {{ if .url }}</a>{{ end }}
-                    </div>
                     {{ end }}
                 </div>
             </div>
@@ -432,5 +480,16 @@
         80% { opacity: 1; transform: scale(1); }
         100% { opacity: 0; transform: scale(0.9); }
     }
+    
+    .poster-tag {
+        position: absolute;
+        bottom: 67px;
+        right: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 5px 10px;
+        font-size: 1.2rem;
+        border-radius: 5px;
+      }
 </style>
 {{ end }}
