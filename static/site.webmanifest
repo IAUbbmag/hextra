@@ -1,6 +1,6 @@
 {
-  "name": "Hextra",
-  "short_name": "Hextra",
+  "name": "Bit & Byte Journal",
+  "short_name": "Bit & Byte Journal",
   "start_url": "index.html",
   "icons": [
     {
@@ -14,7 +14,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
   "display": "standalone"
 }
