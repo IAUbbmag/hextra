@@ -1,0 +1,82 @@
+{{ define "main" }}
+
+  {{ $icons := dict
+    "target.svg" (dict "resource" (resources.Get "icons/target.svg") "alt" "Target Icon")
+    "book.svg" (dict "resource" (resources.Get "icons/book.svg") "alt" "Book Icon")
+    "community.svg" (dict "resource" (resources.Get "icons/community.svg") "alt" "Community Icon")
+    "location.svg" (dict "resource" (resources.Get "icons/location.svg") "alt" "Location Icon")
+    "connect.svg" (dict "resource" (resources.Get "icons/connect.svg") "alt" "Connect Icon")
+    "telegram.svg" (dict "resource" (resources.Get "icons/telegram.svg") "alt" "Telegram Icon")
+    "github.svg" (dict "resource" (resources.Get "icons/github.svg") "alt" "GitHub Icon")
+    "linkedin.svg" (dict "resource" (resources.Get "icons/linkedin.svg") "alt" "LinkedIn Icon")
+  }}
+
+  <style>
+    .logo-img {
+      max-width: 30vw;
+      opacity: 0.3; 
+      height: auto;
+      position: absolute;
+      top: 20;
+      z-index: -1; 
+      inset-inline-end: 0;
+    }
+    @media (max-width: 768px) {
+      .logo-img {
+        max-width: 25vw; 
+      }
+    }
+    @media (max-width: 576px) {
+      .logo-img {
+        max-width: 35vw; 
+      }
+    }
+    .content img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .animated-icon {
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    h2:hover .animated-icon {
+      transform: scale(1.5) rotate(10deg);
+      filter: hue-rotate(90deg); 
+    }
+    .content a img {
+      transition: transform 0.3s ease;
+    }
+    .content a:hover img {
+      transform: scale(1.2); 
+    }
+  </style>
+
+  <div class="hx-mx-auto hx-flex hx-max-w-[90rem] hx-px-4 hx-py-8">
+    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
+    <div class="hx-flex hx-w-full hx-min-h-[calc(100vh-var(--navbar-height))] hx-gap-6">
+      
+      <article class="hx-break-words hx-min-w-0">
+        <div class="content hx-mt-6">
+          
+          {{ $content := .Content }}
+          {{ range $name, $icon := $icons }}
+            {{ if $icon.resource }}
+              {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) (printf `<img src="%s" alt="%s" class="%s" style="width: 35px; height: 35px; vertical-align: middle; margin-right: 8px;"` $icon.resource.RelPermalink $icon.alt (cond (or (eq $name "telegram.svg") (eq $name "github.svg") (eq $name "linkedin.svg")) "" "animated-icon")) }}
+            {{ else }}
+              {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) "" }}
+            {{ end }}
+          {{ end }}
+          {{ $content | safeHTML }}
+        </div>
+      </article>
+     
+        {{ $logo := resources.Get "images/logo.svg" }}
+        {{ if $logo }}
+          <img src="{{ $logo.RelPermalink }}" alt="Logo" class="logo-img" id="logo">
+        {{ else }}
+          <p class="hx-text-red-500">Error: Logo not found in assets</p>
+        {{ end }}
+    </div>
+  </div>
+
+{{ end }}
