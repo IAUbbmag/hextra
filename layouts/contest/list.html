@@ -1,58 +1,58 @@
 {{ define "main" }}
   <style>
     .contest-container {
-      padding: 16px 10px; /* پدینگ خارجی برای فاصله بورder از لبه‌ها */
+      padding: 16px 10px; 
       z-index: 1;
-      padding-top: 100px; /* فضای اضافی برای تصویر در موبایل */
-      position: relative; /* برای کنترل موقعیت تصویر */
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; /* سایه دور لبه‌های خارجی */
-      border-radius: 0.5rem; /* گوشه‌های گرد */
+      padding-top: 100px; 
+      position: relative; 
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 0.5rem; 
     }
     .contest-border {
-      border: 1px solid #d1d5db; /* بورder داخل کانتینر */
-      border-radius: 0.375rem; /* گوشه‌های کمی کوچک‌تر برای هماهنگی */
+      border: 1px solid #d1d5db; 
+      border-radius: 0.375rem; 
     }
     .contest-image {
       width: 210px;
       height: 180px;
       position: absolute;
       top: -60px;
-      inset-inline-end: -20px; /* چپ برای فارسی، راست برای انگلیسی */
+      inset-inline-end: -20px; 
       z-index: 10;
     }
     .contest-title {
-      padding-inline-end: 220px; /* فاصله از تصویر */
+      padding-inline-end: 220px;
     }
     @media (max-width: 640px) {
       .contest-container {
         padding-top: 100px;
-        margin-top: 20px; /* فاصله 20 پیکسلی از بالای صفحه */
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; /* سایه بیشتر */
-        border-radius: 0.5rem; /* گوشه‌های گرد */
+        margin-top: 20px; 
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+        border-radius: 0.5rem; 
       }
       .contest-image {
         position: absolute;
         top: -50px;
-        left: 50vw !important; /* 50 درصد عرض viewport */
-        transform: translateX(-50%) !important; /* جابجایی به چپ برای وسط‌چین شدن */
+        left: 50vw !important; 
+        transform: translateX(-50%) !important; 
         width: 150px;
         height: 130px;
-        inset-inline-end: auto !important; /* حذف استایل دسکتاپ */
+        inset-inline-end: auto !important; 
       }
       .contest-title {
         padding-inline-end: 0;
         text-align: center;
-        margin-top: -70px; /* فاصله از تصویر */
+        margin-top: -70px; 
       }
       .contest-border {
-        padding-top: 50px; /* اضافه کردن 50 پیکسل به ارتفاع بالای بورder */
+        padding-top: 50px; 
       }
     }
     @media (min-width: 640px) {
       .contest-container {
         padding-top: 16px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* سایه بیشتر */
-        border-radius: 0.5rem; /* گوشه‌های گرد */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem; 
       }
     }
   </style>
@@ -74,14 +74,14 @@
               {{ range (sort .Pages "Date" "desc") }}
                 <div onclick="window.location='{{ .RelPermalink }}'" class="hx-cursor-pointer hx-mt-8 hx-mb-6">
                   <div class="hx-bg-white hx-shadow hx-rounded-lg hx-relative hx-transition-all hx-duration-300 hover:hx-shadow-lg contest-container">
-                    <div class="contest-border"> <!-- بورder داخل کانتینر -->
+                    <div class="contest-border"> 
                       {{ if .Params.image }}
                         {{ $image := resources.Get .Params.image }}
                         {{ if $image }}
                           <img src="{{ $image.RelPermalink }}" alt="{{ .Title }} image" class="hx-object-contain contest-image">
                         {{ end }}
                       {{ end }}
-                      <div class="contest-content hx-p-6"> <!-- پدینگ داخلی حفظ شده -->
+                      <div class="contest-content hx-p-6"> 
                         <h3 class="hx-text-xl hx-font-medium hx-mb-1 hx-text-gray-900 contest-title">
                           {{ .Title }}
                         </h3>
