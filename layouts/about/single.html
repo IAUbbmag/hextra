@@ -1,34 +1,35 @@
 {{ define "main" }}
-
   {{ $icons := dict
     "target.svg" (dict "resource" (resources.Get "icons/target.svg") "alt" "Target Icon")
     "book.svg" (dict "resource" (resources.Get "icons/book.svg") "alt" "Book Icon")
     "community.svg" (dict "resource" (resources.Get "icons/community.svg") "alt" "Community Icon")
     "location.svg" (dict "resource" (resources.Get "icons/location.svg") "alt" "Location Icon")
     "connect.svg" (dict "resource" (resources.Get "icons/connect.svg") "alt" "Connect Icon")
+    "license.svg" (dict "resource" (resources.Get "icons/license.svg") "alt" "License Icon")
     "telegram.svg" (dict "resource" (resources.Get "icons/telegram.svg") "alt" "Telegram Icon")
     "github.svg" (dict "resource" (resources.Get "icons/github.svg") "alt" "GitHub Icon")
     "linkedin.svg" (dict "resource" (resources.Get "icons/linkedin.svg") "alt" "LinkedIn Icon")
+    "license.jpg" (dict "resource" (resources.Get "images/license.jpg") "alt" "License Image")
   }}
 
   <style>
     .logo-img {
       max-width: 30vw;
-      opacity: 0.3; 
       height: auto;
       position: absolute;
-      top: 20;
-      z-index: -1; 
+      top: 20px;
       inset-inline-end: 0;
+      opacity: 0.3;
+      z-index: -1;
     }
     @media (max-width: 768px) {
       .logo-img {
-        max-width: 25vw; 
+        max-width: 25vw;
       }
     }
     @media (max-width: 576px) {
       .logo-img {
-        max-width: 35vw; 
+        max-width: 35vw;
       }
     }
     .content img {
@@ -41,27 +42,54 @@
     }
     h2:hover .animated-icon {
       transform: scale(1.5) rotate(10deg);
-      filter: hue-rotate(90deg); 
+      filter: hue-rotate(90deg);
     }
     .content a img {
       transition: transform 0.3s ease;
     }
     .content a:hover img {
-      transform: scale(1.2); 
+      transform: scale(1.2);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      margin: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
     }
   </style>
 
   <div class="hx-mx-auto hx-flex hx-max-w-[90rem] hx-px-4 hx-py-8">
     {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
     <div class="hx-flex hx-w-full hx-min-h-[calc(100vh-var(--navbar-height))] hx-gap-6">
-      
       <article class="hx-break-words hx-min-w-0">
         <div class="content hx-mt-6">
-          
           {{ $content := .Content }}
           {{ range $name, $icon := $icons }}
             {{ if $icon.resource }}
-              {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) (printf `<img src="%s" alt="%s" class="%s" style="width: 35px; height: 35px; vertical-align: middle; margin-right: 8px;"` $icon.resource.RelPermalink $icon.alt (cond (or (eq $name "telegram.svg") (eq $name "github.svg") (eq $name "linkedin.svg")) "" "animated-icon")) }}
+              {{ if eq $name "license.jpg" }}
+                {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) (printf `<img src="%s" alt="%s" class="license-img" style="width: 100px; height: 100px; vertical-align: middle; margin-top: 8px;"` $icon.resource.RelPermalink $icon.alt) }}
+              {{ else }}
+                {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) (printf `<img src="%s" alt="%s" class="%s" style="width: 35px; height: 35px; vertical-align: middle; margin-right: 8px;"` $icon.resource.RelPermalink $icon.alt (cond (or (eq $name "telegram.svg") (eq $name "github.svg") (eq $name "linkedin.svg")) "" "animated-icon")) }}
+              {{ end }}
             {{ else }}
               {{ $content = $content | replaceRE (printf `<img src="%s" alt="[^"]+"` $name) "" }}
             {{ end }}
@@ -69,14 +97,46 @@
           {{ $content | safeHTML }}
         </div>
       </article>
-     
-        {{ $logo := resources.Get "images/logo.svg" }}
-        {{ if $logo }}
-          <img src="{{ $logo.RelPermalink }}" alt="Logo" class="logo-img" id="logo">
-        {{ else }}
-          <p class="hx-text-red-500">Error: Logo not found in assets</p>
-        {{ end }}
+      {{ $logo := resources.Get "images/logo.svg" }}
+      {{ if $logo }}
+        <img src="{{ $logo.RelPermalink }}" alt="Logo" class="logo-img" id="logo">
+      {{ else }}
+        <p class="hx-text-red-500">Error: Logo not found in assets</p>
+      {{ end }}
     </div>
   </div>
 
+  <div id="licenseModal" class="modal">
+    <span class="modal-close">×</span>
+    <img id="modalImage" src="" alt="License Image">
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const licenseLink = document.querySelector(".license-link");
+      const modal = document.getElementById("licenseModal");
+      const modalImage = document.getElementById("modalImage");
+      const closeModal = document.querySelector(".modal-close");
+
+      if (licenseLink) {
+        licenseLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          modalImage.src = licenseLink.href;
+          modal.style.display = "flex";
+        });
+      }
+
+      if (closeModal) {
+        closeModal.addEventListener("click", () => {
+          modal.style.display = "none";
+        });
+      }
+
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.style.display = "none";
+        }
+      });
+    });
+  </script>
 {{ end }}
