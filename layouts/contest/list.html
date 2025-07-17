@@ -1,0 +1,121 @@
+{{ define "main" }}
+  <style>
+    .contest-container {
+      padding: 16px 10px; 
+      z-index: 1;
+      padding-top: 100px; 
+      position: relative; 
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      border-radius: 0.5rem; 
+    }
+    .contest-border {
+      border: 1px solid #d1d5db; 
+      border-radius: 0.375rem; 
+    }
+    .contest-image {
+      width: 210px;
+      height: 180px;
+      position: absolute;
+      top: -60px;
+      inset-inline-end: -20px; 
+      z-index: 10;
+    }
+    .contest-title {
+      padding-inline-end: 220px;
+    }
+    @media (max-width: 640px) {
+      .contest-container {
+        padding-top: 100px;
+        margin-top: 20px; 
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; 
+        border-radius: 0.5rem; 
+      }
+      .contest-image {
+        position: absolute;
+        top: -50px;
+        left: 50vw !important; 
+        transform: translateX(-50%) !important; 
+        width: 150px;
+        height: 130px;
+        inset-inline-end: auto !important; 
+      }
+      .contest-title {
+        padding-inline-end: 0;
+        text-align: center;
+        margin-top: -70px; 
+      }
+      .contest-border {
+        padding-top: 50px; 
+      }
+    }
+    @media (min-width: 640px) {
+      .contest-container {
+        padding-top: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem; 
+      }
+    }
+  </style>
+  <div class='hx-mx-auto hx-flex {{ partial "utils/page-width" . }}'>
+    {{ partial "sidebar.html" (dict "context" .) }}
+    {{ partial "toc.html" . }}
+    <article class="hx-w-full hx-break-words hx-flex hx-min-h-[calc(100vh-var(--navbar-height))] hx-min-w-0 hx-justify-center hx-pb-8 hx-pr-[calc(env(safe-area-inset-right)-1.5rem)]">
+      <main class="hx-w-full hx-min-w-0 hx-max-w-6xl hx-px-6 hx-pt-4 md:hx-px-12">
+        <div class="content">
+          {{ if .Title }}
+            <h1 class="hx-text-3xl hx-font-bold hx-mb-6">{{ .Title }}</h1>
+          {{ end }}
+          {{ .Content }}
+          
+          <!-- Competitions List Section -->
+          <section class="hx-mt-8">
+            <h2 class="hx-text-2xl hx-font-semibold hx-mb-6">{{ i18n "competitions_title" | default "Competitions" }}</h2>
+            <div class="hx-flex hx-flex-col hx-gap-8">
+              {{ range (sort .Pages "Date" "desc") }}
+                <div onclick="window.location='{{ .RelPermalink }}'" class="hx-cursor-pointer hx-mt-8 hx-mb-6">
+                  <div class="hx-bg-white hx-shadow hx-rounded-lg hx-relative hx-transition-all hx-duration-300 hover:hx-shadow-lg contest-container">
+                    <div class="contest-border"> 
+                      {{ if .Params.image }}
+                        {{ $image := resources.Get .Params.image }}
+                        {{ if $image }}
+                          <img src="{{ $image.RelPermalink }}" alt="{{ .Title }} image" class="hx-object-contain contest-image">
+                        {{ end }}
+                      {{ end }}
+                      <div class="contest-content hx-p-6"> 
+                        <h3 class="hx-text-xl hx-font-medium hx-mb-1 hx-text-gray-900 contest-title">
+                          {{ .Title }}
+                        </h3>
+                        <p class="hx-text-gray-600 hx-mb-4">{{ .Summary | truncate 150 }}</p>
+                        <div class="hx-text-sm hx-text-gray-500 hx-flex hx-flex-col hx-gap-1">
+                          {{ if .Params.start_date }}
+                            <span>{{ i18n "start_date_label" | default "Start" }}: {{ .Params.start_date }}</span>
+                          {{ end }}
+                          {{ if .Params.end_date }}
+                            <span>{{ i18n "end_date_label" | default "End" }}: {{ .Params.end_date }}</span>
+                          {{ end }}
+                          {{ if .Params.status }}
+                            <span class="hx-mt-2 hx-px-2 hx-py-1 hx-rounded
+                              {{ if eq .Params.status "ongoing" }}hx-bg-green-100{{ else if eq .Params.status "completed" }}hx-bg-red-100{{ end }}">
+                              {{ if eq .Params.status "ongoing" }}
+                                <span class="hx-text-green-600">{{ i18n "status_ongoing" | default "Ongoing" }}</span>
+                              {{ else if eq .Params.status "completed" }}
+                                <span class="hx-text-red-600">{{ i18n "status_completed" | default "Completed" }}</span>
+                              {{ end }}
+                            </span>
+                          {{ end }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {{ end }}
+            </div>
+          </section>
+        </div>
+        <div class="hx-mt-16"></div>
+        {{ partial "components/last-updated.html" . }}
+        {{ partial "components/comments.html" . }}
+      </main>
+    </article>
+  </div>
+{{ end }}
