@@ -1,0 +1,7 @@
+name: Update website submodule
+
+on: push: branches: - develop
+
+jobs: update-submodule: runs-on: ubuntu-latest steps: - name: Checkout hextra repo uses: actions/checkout@v4
+
+- name: Clone website repo uses: actions/checkout@v4 with: repository: IAUbbmag/website token: ${{ secrets.GH_PAT }} path: website fetch-depth: 0 - name: Update submodule to latest commit run: | cd website git config user.name "github-actions[bot]" git config user.email "41898282+github-actions[bot]@users.noreply.github.com" cd themes/hextra git fetch origin git checkout develop git pull cd ../.. git add themes/hextra if git diff --cached --quiet; then echo "No submodule update detected. Skipping commit." else git commit -m "chore: update template submodule to latest develop commit" git push origin main fi 
