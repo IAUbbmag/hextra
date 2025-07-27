@@ -13,6 +13,7 @@
 {{- $interviews := (T "interviews") | default "interviews" -}}
 {{- $references := (T "references") | default "References" -}}
 {{- $about := (T "about") | default "About Us" -}}
+{{- $collaboration := (T "collaboration") | default "Collaboration" -}}
 
 {{- $footerWidth := "hx-max-w-screen-xl" -}}
 {{- with .Site.Params.footer.width -}}-
@@ -98,12 +99,14 @@
               <li><a href="/fa/interviews" class="hover:text-blue-500 transition-colors text-sm">{{ $interviews }}</a></li>
               <li><a href="/fa/staff" class="hover:text-blue-500 transition-colors text-sm">{{ $staff }}</a></li>
               <li><a href="/fa/references" class="hover:text-blue-500 transition-colors text-sm">{{ $references }}</a></li>
+              <li><a href="/fa/collaboration" class="hover:text-blue-500 transition-colors text-sm">{{ $collaboration }}</a></li>
               <li><a href="/fa/about" class="hover:text-blue-500 transition-colors text-sm">{{ $about }}</a></li>
             {{ else if eq .Page.Lang "en" }}
               <li><a href="/en/issues" class="hover:text-blue-500 transition-colors text-sm">{{ $issues }}</a></li>
               <li><a href="/en/interviews" class="hover:text-blue-500 transition-colors text-sm">{{ $interviews }}</a></li>
               <li><a href="/en/staff" class="hover:text-blue-500 transition-colors text-sm">{{ $staff }}</a></li>
               <li><a href="/en/references" class="hover:text-blue-500 transition-colors text-sm">{{ $references }}</a></li>
+              <li><a href="/en/collaboration" class="hover:text-blue-500 transition-colors text-sm">{{ $collaboration }}</a></li>
               <li><a href="/en/about" class="hover:text-blue-500 transition-colors text-sm">{{ $about }}</a></li>
             {{ end }}
           </ul>
