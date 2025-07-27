@@ -1,0 +1,68 @@
+{{ define "main" }}
+  {{ $icons := dict
+    "telegram.svg" (dict "resource" (resources.Get "icons/telegram.svg") "alt" "Telegram Icon")
+    "github.svg" (dict "resource" (resources.Get "icons/github.svg") "alt" "GitHub Icon")
+    "linkedin.svg" (dict "resource" (resources.Get "icons/linkedin.svg") "alt" "LinkedIn Icon")
+  }}
+
+  <style>
+    .logo-img {
+      max-width: 30vw;
+      height: auto;
+      position: absolute;
+      top: 20px;
+      inset-inline-end: 0;
+      opacity: 0.3;
+      z-index: -1;
+    }
+    @media (max-width: 768px) {
+      .logo-img {
+        max-width: 25vw;
+      }
+    }
+    @media (max-width: 576px) {
+      .logo-img {
+        max-width: 35vw;
+      }
+    }
+    .content a img {
+      transition: transform 0.3s ease;
+      width: 24px;
+      height: 24px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    .content a:hover img {
+      transform: scale(1.2);
+    }
+    .form-button {
+      display: inline-block;
+      background-color: #10b981; /* Tailwind green-500 */
+      color: white;
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem; /* Tailwind rounded */
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    .form-button:hover {
+      background-color: #059669; /* Tailwind green-600 */
+    }
+  </style>
+
+  <div class="hx-mx-auto hx-flex hx-max-w-[90rem] hx-px-4 hx-py-8">
+    {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
+    <div class="hx-flex hx-w-full hx-min-h-[calc(100vh-var(--navbar-height))] hx-gap-6">
+      <article class="hx-break-words hx-min-w-0">
+        <div class="content hx-mt-6">
+        {{ .Content }}
+      </article>
+      {{ $logo := resources.Get "images/logo.svg" }}
+      {{ if $logo }}
+        <img src="{{ $logo.RelPermalink }}" alt="Logo" class="logo-img" id="logo">
+      {{ else }}
+        <p class="hx-text-red-500">Error: Logo not found in assets</p>
+      {{ end }}
+    </div>
+  </div>
+{{ end }}
