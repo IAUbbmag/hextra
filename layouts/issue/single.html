@@ -1,5 +1,6 @@
 {{ define "main" }}
 {{- $literaryeditor := (T "literaryeditor") | default "Literary Editor" -}}
+{{- $facultyadvisor := (T "facultyadvisor") | default "Faculty Advisor" -}}
 {{- $owner := (T "owner") | default "Director-in-Chief" -}}
 {{- $manager := (T "manager") | default "Responsible Director" -}}
 {{- $editorinchief := (T "editorinchief") | default "Editor-in-Chief" -}}
@@ -83,6 +84,33 @@
         </div>
 
         <!-- List Editor -->
+                 {{ if .Params.facultyadvisor }}
+            <div class="p-4 rounded-lg shadow">
+                <h2 class="text-2xl font-bold">{{ $facultyadvisor }}:</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
+                    {{ range .Params.facultyadvisor }}
+                        {{ if isset . "profile" }}
+                            {{ $staff := site.GetPage .profile }}
+                            {{ if $staff }}
+                            <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                                {{ with $staff.Params.image | resources.Get }}
+                                    <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                                {{ else }}
+                                    <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                                {{ end }}
+                                <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                                <!-- <p class="text-gray-500">{{ $staff.Params.role }}</p> -->
+                            </a>
+                            {{ else }}
+                            <p class="text-red-500">پروفایل یافت نشد!</p>
+                            {{ end }}
+                        {{ else }}
+                            <p class="text-red-500">خطا: مقدار `profile` در `{{ $owner }}` وجود ندارد.</p>
+                        {{ end }}
+                    {{ end }}
+                </div>
+            </div>
+        {{ end }}
         {{ if .Params.owner }}
             <div class="p-4 rounded-lg shadow">
                 <h2 class="text-2xl font-bold">{{ $owner }}:</h2>
