@@ -77,7 +77,14 @@
                 {{ range .Params.toci }}
                 <li class="flex justify-between items-center border-b border-dashed pb-2">
                     <span>{{ .title }}</span>
-                    <a href="#" class="text-blue-500 ref-link" data-content="{{ .ref }}">[Ref]</a>
+
+                    
+                    {{ if .ref}}
+                    <a href="{{ .ref | relURL }}" class="text-blue-500" >[Ref]</a>
+                    {{ end }}
+
+
+                    <!-- <a href="#" class="text-blue-500 ref-link" data-content="{{ .ref }}">[Ref]</a> -->
                 </li>
                 {{ end }}
             </ul>
@@ -412,12 +419,14 @@
 </div>
 
 <!-- Pop-up References -->
+
+<!-- 
 <div class="popup-overlay hidden"></div>
 <div class="popup hidden">
     <div class="popup-box">
         <h2 class="text-xl font-bold">{{ $references }}</h2>
         <ul id="popup-content" class="mt-4 space-y-3">
-            <!-- References content is loaded here.-->
+             References content is loaded here.
         </ul>
         <button id="closePopup" class="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">{{ $close }}</button>
     </div>
@@ -458,7 +467,8 @@
             }, 3000);
         });
     }
-</script>
+</script> 
+-->
 
 <style>
     .blurred {
