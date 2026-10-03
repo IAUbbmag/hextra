@@ -45,7 +45,7 @@
           {{ range $k, $v := .Params }}
             {{ if and (reflect.IsSlice $v) (gt (len $v) 0) }}
               {{ range $v }}
-                {{ if and (isset . "profile") (eq .profile $currentProfile) }}
+                {{ if and (reflect.IsMap .) (isset . "profile") (eq .profile $currentProfile) }}
                   {{ $roleLabel := T $k }}
                   {{ $matchedRoles = $matchedRoles | append $roleLabel }}
                 {{ end }}
