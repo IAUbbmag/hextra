@@ -1,0 +1,35 @@
+{{- /*
+  Renders one team-role section on an issue page.
+  Params: "title" (translated role heading), "members" (list from front matter).
+  Each member is either { profile: "staff/<slug>" } (linked card with photo)
+  or { text: "<name>" } (plain card, for organisations or people without a profile).
+*/ -}}
+{{- $title := .title -}}
+<div class="p-4 rounded-lg shadow">
+    <h2 class="text-2xl font-bold">{{ $title }}:</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-4">
+        {{ range .members }}
+            {{ if isset . "profile" }}
+                {{ $staff := site.GetPage .profile }}
+                {{ if $staff }}
+                <a href="{{ $staff.Permalink }}" class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center transition transform hover:scale-105">
+                    {{ with $staff.Params.image | resources.Get }}
+                        <img src="{{ .RelPermalink }}" alt="{{ $staff.Params.fullname }}" class="rounded-full mx-auto">
+                    {{ else }}
+                        <img src="{{ "images/avatar.png" | relURL }}" alt="Default Avatar" class="rounded-full mx-auto">
+                    {{ end }}
+                    <p class="font-semibold mt-2">{{ $staff.Params.fullname }}</p>
+                </a>
+                {{ else }}
+                <p class="text-red-500">پروفایل یافت نشد!</p>
+                {{ end }}
+            {{ else if isset . "text" }}
+                <div class="editor-card bg-gray-100 p-4 rounded-lg shadow text-center flex items-center justify-center">
+                    <p class="font-semibold">{{ .text }}</p>
+                </div>
+            {{ else }}
+                <p class="text-red-500">خطا: مقدار `profile` یا `text` در `{{ $title }}` وجود ندارد.</p>
+            {{ end }}
+        {{ end }}
+    </div>
+</div>
