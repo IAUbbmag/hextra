@@ -13,7 +13,8 @@ $(document).ready(function() {
      Includes logic for extra elements in slide 3 with fadeInUp/fadeOutUp animations.
      Adds dynamic navigation controls (left/right) for user interaction.
   ================================================== */
-  var coolSliderApp = new Vue({
+  // The old slider only exists when the page has no hero slider (see layouts/index.html).
+  var coolSliderApp = document.getElementById("cool-slider-app") && window.Vue && new Vue({
     el: "#cool-slider-app",
     data: {
       slideNumber: 0,

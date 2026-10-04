@@ -1,0 +1,190 @@
+{{- /*
+  Hero slider for the homepage.
+
+  Content comes from the page's front matter (`heroslider:`), see content/fa/_index.md.
+  Four slide kinds are supported: "move" (robotic hand), "cover" (issue cover with a moving light),
+  "shelf" (3D stack of published issues) and "stage" (call for collaboration).
+
+  Performance notes
+  - Only the first slide's images are requested on page load (with high priority).
+    Images of the other slides use data-src / data-srcset and are attached by hero.js after the
+    page has loaded, so they never compete with the first paint.
+  - All motion is CSS (transform / opacity / custom properties); animations only run on the
+    visible slide and are paused when the hero is scrolled out of view.
+  - Fonts are subsetted (Persian + Latin) and only used inside the hero.
+*/ -}}
+{{- $hero := .Params.heroslider -}}
+{{- $page := . -}}
+{{- $fd := slice "۰" "۱" "۲" "۳" "۴" "۵" "۶" "۷" "۸" "۹" -}}
+{{- $css := resources.Get "css/feature/hero.css" | minify | fingerprint -}}
+{{- $js := resources.Get "js/feature/hero.js" | minify | fingerprint -}}
+{{- $alex := resources.Get "fonts/alexandria-fa.woff2" -}}
+{{- $mono := resources.Get "fonts/jbmono-latin.woff2" -}}
+
+<link rel="preload" href="{{ $alex.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face{font-family:'BBAlex';src:url({{ $alex.RelPermalink }}) format('woff2');font-weight:100 900;font-display:swap}
+  @font-face{font-family:'BBMono';src:url({{ $mono.RelPermalink }}) format('woff2');font-weight:100 800;font-display:swap}
+</style>
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<section class="bbh" id="bb-hero" dir="rtl" aria-roledescription="carousel" aria-label="{{ $hero.ariaLabel | default "Bit and Byte" }}">
+  {{- $count := len $hero.slides -}}
+  {{- range $i, $s := $hero.slides }}
+  {{- $first := eq $i 0 -}}
+  {{- $n := add $i 1 -}}
+  <div class="bbh-slide bbh-{{ $s.kind }}{{ if $first }} is-active{{ end }}" data-seconds="{{ $s.seconds | default 9 }}" role="group" aria-roledescription="slide" aria-label="{{ $n }} / {{ $count }}"{{ if not $first }} aria-hidden="true"{{ end }}>
+
+    {{- /* ============ 1. MOVE: the robotic hand over the chess board ============ */ -}}
+    {{- if eq $s.kind "move" }}
+      {{- $scene := resources.Get $s.image -}}
+      {{- $hand := resources.Get $s.hand -}}
+      {{- $sceneS := $scene.Resize "1280x webp q78" -}}
+      {{- $handS := $hand.Resize "1000x webp q80" -}}
+      {{- if $first }}
+      <link rel="preload" as="image" href="{{ $sceneS.RelPermalink }}" imagesrcset="{{ $sceneS.RelPermalink }} 1280w, {{ $scene.RelPermalink }} 2133w" imagesizes="100vw" fetchpriority="high">
+      {{- end }}
+      <div class="bbh-fill">
+        <div class="mv-stage">
+          <img class="mv-lay" {{ if $first }}src{{ else }}data-src{{ end }}="{{ $sceneS.RelPermalink }}" {{ if $first }}srcset{{ else }}data-srcset{{ end }}="{{ $sceneS.RelPermalink }} 1280w, {{ $scene.RelPermalink }} 2133w" sizes="(max-width: 900px) 200vw, 100vw" width="2133" height="1280" alt="{{ $s.alt }}" style="inset:0;width:100%;height:100%"{{ if $first }} fetchpriority="high"{{ end }} decoding="async">
+          <div class="mv-lay mv-reach" style="inset:0">
+            <img class="mv-lay mv-hand" {{ if $first }}src{{ else }}data-src{{ end }}="{{ $handS.RelPermalink }}" {{ if $first }}srcset{{ else }}data-srcset{{ end }}="{{ $handS.RelPermalink }} 1000w, {{ $hand.RelPermalink }} 1714w" sizes="80vw" width="1714" height="1496" alt="" decoding="async">
+          </div>
+        </div>
+      </div>
+      <div class="mv-shade"></div>
+      <div class="bbh-topfade"></div>
+      <div class="bbh-copy mv-copy">
+        <h2 class="bbh-h">
+          {{- range $k, $line := $s.lines }}
+          <span class="bbh-line{{ if eq $k 1 }} bbh-grad{{ end }}" data-scramble="{{ $line }}" data-at="{{ index (slice 20 30 38) $k }}">{{ $line }}</span>
+          {{- end }}
+        </h2>
+        <p class="bbh-p bbh-rise" style="--d:2.2s"><span class="bbh-lead">{{ $s.lead }}</span>{{ $s.text }}</p>
+      </div>
+    {{- end }}
+
+    {{- /* ============ 2. COVER: issue cover, a light visits each face ============ */ -}}
+    {{- if eq $s.kind "cover" }}
+      {{- $ip := $page.Site.GetPage $s.issue -}}
+      {{- $poster := resources.Get (printf "images/%s" $ip.Params.poster) -}}
+      {{- $pL := $poster.Resize "1413x webp q76" -}}
+      {{- $pS := $poster.Resize "900x webp q74" -}}
+      <div class="bbh-fill cv-frame">
+        <div class="cv-geo">
+          <div class="cv-kb">
+            <img class="cv-cover" data-src="{{ $pL.RelPermalink }}" data-srcset="{{ $pS.RelPermalink }} 900w, {{ $pL.RelPermalink }} 1440w" sizes="(max-width: 900px) 125vh, 100vw" width="1413" height="2000" alt="{{ $s.alt }}" decoding="async">
+            <div class="cv-tour"></div>
+          </div>
+        </div>
+      </div>
+      <div class="cv-torch"></div>
+      <div class="cv-sweep"></div>
+      <div class="cv-side"></div>
+      <div class="bbh-dust"></div>
+      <div class="bbh-copy cv-copy">
+        <h2 class="bbh-h cv-h"><span class="bbh-w" style="--d:.35s">{{ $s.title }} <span class="bbh-grad">{{ $s.number }}</span></span></h2>
+        <p class="bbh-p bbh-rise" style="--d:1.3s"><span class="bbh-lead">{{ $s.lead }}</span>{{ $s.text }}</p>
+        <div class="bbh-rise" style="--d:1.6s"><a class="bbh-cta" href="{{ $ip.RelPermalink }}">{{ $s.button }}</a></div>
+      </div>
+    {{- end }}
+
+    {{- /* ============ 3. SHELF: 3D stack of the published issues ============ */ -}}
+    {{- if eq $s.kind "shelf" }}
+      {{- $issues := slice -}}
+      {{- range $s.issues }}
+        {{- $ip := $page.Site.GetPage .page -}}
+        {{- $poster := resources.Get (printf "images/%s" $ip.Params.poster) -}}
+        {{- $issues = $issues | append (dict "p" $ip "img" ($poster.Resize "720x webp q78") "thumb" ($poster.Resize "96x webp q70") "label" .label "color" .color "ink" .ink) -}}
+      {{- end }}
+      {{- $f := index $issues 0 -}}
+      <div class="sh-wrap" style="--acc:{{ $f.color }};--ink:{{ $f.ink }}">
+        {{- range $k, $it := $issues }}
+        <div class="sh-bg{{ if eq $k 0 }} is-on{{ end }}" data-k="{{ $k }}" style="--c:{{ $it.color }}40"></div>
+        {{- end }}
+        <div class="sh-row">
+          <div class="sh-copy">
+            <span class="sh-tag">{{ $s.tag }}</span>
+            <h2 class="sh-title">{{ $s.title }}</h2>
+            <p class="sh-text">{{ $s.text }}</p>
+            {{- range $k, $it := $issues }}
+            <a class="sh-cta{{ if eq $k 0 }} is-on{{ end }}" data-k="{{ $k }}" href="{{ $it.p.RelPermalink }}">{{ $s.buttonPrefix }} {{ $it.label }}</a>
+            {{- end }}
+          </div>
+          <div class="sh-stagewrap">
+            <div class="sh-stage">
+              <div class="sh-float">
+                <div class="sh-rig">
+                  {{- range $k, $it := $issues }}
+                  <button type="button" class="sh-card" data-k="{{ $k }}" data-pos="{{ $k }}" data-color="{{ $it.color }}" data-ink="{{ $it.ink }}" aria-label="{{ $it.label }}">
+                    <span class="sh-inside">
+                      <span class="sh-kicker">فهرست مطالب {{ $it.label }}</span>
+                      {{- range $j, $t := $it.p.Params.toci }}
+                      <span class="sh-toc">{{- $n := add $j 1 -}}<b style="color:{{ $it.color }}">{{ if lt $n 10 }}{{ index $fd $n }}{{ else }}{{ index $fd (div $n 10) }}{{ index $fd (mod $n 10) }}{{ end }}</b><span>{{ $t.title }}</span></span>
+                      {{- end }}
+                    </span>
+                    <span class="sh-cover">
+                      <span class="sh-back"><b>بیت و بایت</b><span>نشریه دانشجویی مهندسی کامپیوتر و هوش مصنوعی<br>دانشگاه آزاد اسلامی واحد شیراز</span><i>{{ $it.label }}</i></span>
+                      <span class="sh-front"><img data-src="{{ $it.img.RelPermalink }}" width="{{ $it.img.Width }}" height="{{ $it.img.Height }}" alt="جلد {{ $it.label }} بیت و بایت" decoding="async"><span class="sh-gloss"></span></span>
+                    </span>
+                  </button>
+                  {{- end }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sh-shelf">
+          {{- range $k, $it := $issues }}
+          <button type="button" class="sh-thumb{{ if eq $k 0 }} is-on{{ end }}" data-k="{{ $k }}" aria-label="{{ $it.label }}" style="--c:{{ $it.color }}">
+            <span><img data-src="{{ $it.thumb.RelPermalink }}" alt="" width="44" height="62"></span>{{ $it.label }}<i></i>
+          </button>
+          {{- end }}
+        </div>
+      </div>
+    {{- end }}
+
+    {{- /* ============ 4. STAGE: an empty seat waiting under a spotlight ============ */ -}}
+    {{- if eq $s.kind "stage" }}
+      <div class="st-stage" aria-hidden="true">
+        <div class="st-blinds"></div>
+        <div class="st-floor"></div>
+        <div class="st-on">
+          <div class="st-beam"></div>
+          <div class="st-motes"></div>
+          <div class="st-pool"></div>
+        </div>
+        <div class="st-shadow"></div>
+        <svg class="st-seat" viewBox="0 0 200 250" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path pathLength="1" d="M68 20 h74 a8 8 0 0 1 8 8 v98 h-90 v-98 a8 8 0 0 1 8 -8 z"/>
+          <path pathLength="1" d="M48 126 h114 l-8 22 h-98 z"/>
+          <path pathLength="1" d="M60 148 L52 248 M150 148 L158 248 M72 148 L77 222 M138 148 L133 222"/>
+        </svg>
+        <div class="st-tag"><i></i>{{ $s.tag }}</div>
+        <div class="st-lamp"><i></i></div>
+      </div>
+      <div class="bbh-copy st-copy">
+        <h2 class="bbh-h st-h">
+          {{- range $k, $line := $s.lines }}
+          <span class="bbh-w{{ if eq $k 1 }} bbh-heavy{{ end }}" style="--d:{{ index (slice ".35s" ".6s" ".85s") $k }}">{{ if eq $k 1 }}<span class="bbh-grad">{{ $line }}</span>{{ else }}{{ $line }}{{ end }}</span>
+          {{- end }}
+        </h2>
+        <p class="bbh-p bbh-rise" style="--d:1.3s">{{ $s.text }}</p>
+        <div class="bbh-rise" style="--d:1.6s"><a class="bbh-cta" href="{{ (printf "%s/" $s.url) | relLangURL }}">{{ $s.button }}</a></div>
+      </div>
+    {{- end }}
+
+    <div class="bbh-label" aria-hidden="true">{{ $s.label }}<span>_</span></div>
+  </div>
+  {{- end }}
+
+  <div class="bbh-nav">
+    <div class="bbh-bars">
+      {{- range $i, $s := $hero.slides }}
+      <button type="button" class="bbh-bar{{ if eq $i 0 }} is-current{{ end }}" data-go="{{ $i }}" aria-label="اسلاید {{ index $fd (add $i 1) }}" style="--dur:{{ $s.seconds | default 9 }}s"><i></i></button>
+      {{- end }}
+    </div>
+    <span class="bbh-count"><b>01</b> / {{ printf "%02d" $count }}</span>
+  </div>
+</section>
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>

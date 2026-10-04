@@ -24,6 +24,14 @@
      Disables sidebar and placeholder for a clean homepage layout.
   ================================================== -->
   <div class="hx-w-full">
+    <!-- ==================================================
+       Hero Slider (full width)
+       Used when the page defines `heroslider` in its front matter.
+    ================================================== -->
+    {{ if .Params.heroslider }}
+      {{ partial "heroslider.html" . }}
+    {{ end }}
+
     <!-- Sidebar (disabled for homepage) -->
     {{ partial "sidebar.html" (dict "context" . "disableSidebar" true "displayPlaceholder" false) }}
 
@@ -42,7 +50,9 @@
            Main Slider
            Displays the primary slider (cool-slider) for the homepage.
         ================================================== -->
-        {{ partial "mainslider.html" . }}
+        {{ if not .Params.heroslider }}
+          {{ partial "mainslider.html" . }}
+        {{ end }}
 
         <!-- ==================================================
            Page Content
@@ -62,7 +72,8 @@
            Testimonials Slider
            Displays the testimonials carousel with a centered container.
         ================================================== -->
-        <div class="py-[200px]">
+        <!-- overflow-x: clip keeps the off-screen cards from making the page scroll sideways (RTL) -->
+        <div class="py-[200px]" style="overflow-x: clip">
           <div class="container mx-auto px-4">
             {{ partial "testimonials-slider.html" . }}
           </div>
@@ -88,7 +99,9 @@
   <script>
     AOS.init();
   </script>
+  {{ if not .Params.heroslider }}
   <script src="{{ $vue.RelPermalink }}"></script>
+  {{ end }}
   <script src="{{ $jquery.RelPermalink }}"></script>
   <script src="{{ $homejs.RelPermalink }}"></script>
 {{ end }}
