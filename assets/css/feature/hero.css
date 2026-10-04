@@ -10,6 +10,8 @@
   background:var(--bg);color:var(--fg);font-family:'BBAlex',Tahoma,sans-serif;isolation:isolate;
   -webkit-font-smoothing:antialiased}
 .bbh *,.bbh *::before,.bbh *::after{box-sizing:border-box}
+/* home.css sets font-family on every element; keep the hero on its own fonts */
+.bbh *{font-family:inherit}
 .bbh a{text-decoration:none}
 .bbh img{max-width:none}
 
