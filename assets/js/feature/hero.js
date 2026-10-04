@@ -12,6 +12,7 @@
   var count = root.querySelector('.bbh-count b');
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var finePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  var ltr = root.getAttribute('dir') === 'ltr';
   var cur = 0;
   var leaveTimer = null;
 
@@ -30,7 +31,7 @@
   function idle(fn) { (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(fn); }
 
   /* ---------- headline decode (slide 1) ---------- */
-  var pool = 'ابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی۰۱۲۳۴۵۶۷۸۹';
+  var pool = ltr ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789' : 'ابپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی۰۱۲۳۴۵۶۷۸۹';
   function scramble(slide) {
     var lines = slide.querySelectorAll('[data-scramble]');
     if (!lines.length || reduce) return;
@@ -90,18 +91,18 @@
     }).observe(root);
   }
 
-  /* swipe & keyboard (RTL: swiping to the right goes forward) */
+  /* swipe & keyboard (RTL: swiping to the right goes forward; LTR: to the left) */
   var sx = null, sy = null;
   root.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
   root.addEventListener('touchend', function (e) {
     if (sx === null) return;
     var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + (dx > 0 ? 1 : -1));
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + ((dx > 0) !== ltr ? 1 : -1));
     sx = null;
   }, { passive: true });
   root.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') go(cur + 1);
-    else if (e.key === 'ArrowRight') go(cur - 1);
+    if (e.key === 'ArrowLeft') go(cur + (ltr ? -1 : 1));
+    else if (e.key === 'ArrowRight') go(cur + (ltr ? 1 : -1));
   });
 
   /* ---------- per-slide behaviour ---------- */
@@ -143,7 +144,7 @@
       var w = slide.querySelector('.sh-wrap');
       if (root.classList.contains('is-paused') || w.classList.contains('is-open')) return;
       shelfShow(slide, (+w.dataset.cur || 0) + 1);
-    }, 4500);
+    }, 4000);
   }
   function shelfShow(slide, k) {
     var w = slide.querySelector('.sh-wrap');

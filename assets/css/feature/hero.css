@@ -7,7 +7,7 @@
 .bbh{--acc:#5BE0FF;--fg:#EEF3FF;--muted:#B4BFDA;--bg:#03050C;
   position:relative;overflow:hidden;width:100%;
   height:calc(100vh - var(--navbar-height,4rem));height:calc(100svh - var(--navbar-height,4rem));min-height:560px;
-  background:var(--bg);color:var(--fg);font-family:'BBAlex',Tahoma,sans-serif;direction:rtl;isolation:isolate;
+  background:var(--bg);color:var(--fg);font-family:'BBAlex',Tahoma,sans-serif;isolation:isolate;
   -webkit-font-smoothing:antialiased}
 .bbh *,.bbh *::before,.bbh *::after{box-sizing:border-box}
 .bbh a{text-decoration:none}
@@ -22,6 +22,7 @@
 .bbh-fill{position:absolute;inset:0;overflow:hidden}
 
 /* ---------- shared type ---------- */
+.bbh[dir="ltr"] .bbh-h{letter-spacing:-1.5px}
 .bbh-copy{position:absolute;top:0;bottom:0;right:8%;display:flex;flex-direction:column;justify-content:center;padding:70px 0 90px;z-index:4}
 .bbh-h{margin:0;white-space:nowrap;font-size:72px;line-height:1.3;letter-spacing:-1px;font-weight:200;color:var(--fg)}
 .bbh-line{display:block;font-weight:200}
@@ -82,6 +83,8 @@
 .bbh-move::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16%;background:linear-gradient(0deg,rgba(3,5,12,.6),rgba(3,5,12,0));pointer-events:none;z-index:3}
 .mv-copy{width:min(660px,50%)}
 .mv-copy .bbh-p{text-shadow:0 1px 14px rgba(3,5,12,.75)}
+/* LTR: keep the copy inside the dark area so it never sits on the bright board */
+.bbh[dir="ltr"] .mv-copy{width:min(480px,36%)}
 
 /* ==========================================================================
    2. COVER — issue cover, light tours the faces (mouse takes over)
@@ -101,7 +104,7 @@
   background:radial-gradient(circle min(170px,30cqw) at var(--lx) var(--ly),rgba(200,235,255,.14) 0%,rgba(200,235,255,0) 100%),
     radial-gradient(circle min(430px,70cqw) at var(--lx) var(--ly),rgba(0,0,0,0) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,.6) 60%,rgba(0,0,0,.94) 100%);
   transition:opacity .4s}
-.is-active .cv-tour,.is-leaving .cv-tour{animation:cvTour 17s cubic-bezier(.65,0,.35,1) infinite}
+.is-active .cv-tour,.is-leaving .cv-tour{animation:cvTour 11s cubic-bezier(.65,0,.35,1) infinite}
 @keyframes cvTour{
   0%{--bbx:.46;--bby:.37} 13%{--bbx:.46;--bby:.37}
   20%{--bbx:.221;--bby:.331} 33%{--bbx:.221;--bby:.331}
@@ -149,9 +152,9 @@
 .sh-card[data-pos="1"]{transform:translate3d(80px,-16px,-150px) rotateY(-22deg) rotateZ(-7deg);z-index:4;opacity:.95;filter:brightness(.75)}
 .sh-wrap.is-open .sh-card[data-pos="0"]{transform:translate3d(250px,10px,60px) rotateY(-4deg) scale(.94)}
 .sh-wrap.is-open .sh-card[data-pos="1"]{opacity:.15}
-.sh-inside{position:absolute;inset:0;padding:26px 24px;border-radius:12px;background:#F6F2EA;box-shadow:0 40px 80px rgba(0,0,0,.5),inset 10px 0 18px -12px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:2px;overflow:hidden;text-align:right;direction:rtl}
+.sh-inside{position:absolute;inset:0;padding:26px 24px;border-radius:12px;background:#F6F2EA;box-shadow:0 40px 80px rgba(0,0,0,.5),inset 10px 0 18px -12px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:2px;overflow:hidden;text-align:start}
 .sh-kicker{font-size:12px;font-weight:700;color:#8A7FB8;letter-spacing:1px;margin-bottom:4px}
-.sh-toc{display:flex;gap:10px;align-items:baseline;border-bottom:1px dashed #D9D2C2;padding:7px 0;font-size:14px;line-height:1.6;color:#1D1838;text-align:right}
+.sh-toc{display:flex;gap:10px;align-items:baseline;border-bottom:1px dashed #D9D2C2;padding:7px 0;font-size:14px;line-height:1.6;color:#1D1838;text-align:start}
 .sh-toc b{font-weight:900;min-width:22px}
 .sh-cover{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.6,0,.2,1)}
 .sh-wrap.is-open .sh-card[data-pos="0"] .sh-cover{transform:rotateY(-160deg)}
