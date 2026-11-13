@@ -15,11 +15,38 @@
 .bbh a{text-decoration:none}
 .bbh img{max-width:none}
 
-/* ---------- slides & cross-fade ---------- */
-.bbh-slide{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;container-type:size;
-  transition:opacity .9s ease,visibility 0s linear .9s}
-.bbh-slide.is-active{opacity:1;visibility:visible;transition:opacity .9s ease,visibility 0s}
-.bbh-slide.is-leaving{visibility:visible}
+/* ---------- slides & the seam between them ----------
+   Not a cross-fade: a velocity-matched "cut the curve" (after HyperFrames' motion doctrine).
+   The outgoing slide accelerates sideways and is gone at the cut; the incoming slide picks the
+   motion up mid-flight in the SAME direction and decelerates into place. Only one slide is
+   visible at any moment. The copy travels further than the background, which gives depth.
+   --s is the direction of travel (set by hero.js): forward moves with the reading direction. */
+.bbh{--s:1}
+.bbh-slide{position:absolute;inset:0;overflow:hidden;opacity:0;visibility:hidden;container-type:size}
+.bbh-slide.is-active,.bbh-slide.is-leaving{opacity:1;visibility:visible}
+.bbh-slide.is-leaving{z-index:2;animation:bbhOutX .32s cubic-bezier(.7,0,.84,0) forwards,bbhOutO .3s linear forwards}
+.bbh-slide.is-leaving .bbh-copy{animation:bbhOutCopy .32s cubic-bezier(.7,0,.84,0) forwards}
+.bbh-slide.is-entering{animation:bbhIn .78s linear both}
+.bbh-slide.is-entering .bbh-copy{animation:bbhInCopy .78s linear both}
+@keyframes bbhOutX{to{transform:translateX(calc(var(--s) * 4vw))}}
+@keyframes bbhOutO{to{opacity:0}}
+@keyframes bbhOutCopy{to{transform:translateX(calc(var(--s) * 5vw))}}
+/* the first 41% (= the exit's .32s) the incoming slide waits unseen, then ignites at .35 opacity mid-path;
+   the outgoing fade dies right at that moment, so there is no dead black frame */
+@keyframes bbhIn{
+  0%,40.9%{opacity:0;transform:translateX(calc(var(--s) * -4vw))}
+  41%{opacity:.35;transform:translateX(calc(var(--s) * -4vw));animation-timing-function:cubic-bezier(.16,1,.3,1)}
+  100%{opacity:1;transform:none}}
+@keyframes bbhInCopy{
+  0%,41%{transform:translateX(calc(var(--s) * -5vw));animation-timing-function:cubic-bezier(.16,1,.3,1)}
+  100%{transform:none}}
+/* on desktops the copy also gets a text-scale motion blur at the cut (10px, wrapper only) */
+@media (min-width:901px) and (pointer:fine){
+  @keyframes bbhOutCopy{to{transform:translateX(calc(var(--s) * 5vw));filter:blur(10px)}}
+  @keyframes bbhInCopy{
+    0%,41%{transform:translateX(calc(var(--s) * -5vw));filter:blur(10px);animation-timing-function:cubic-bezier(.16,1,.3,1)}
+    100%{transform:none;filter:blur(0)}}
+}
 .bbh.is-paused-view .bbh-slide *,.bbh.is-paused-view .bbh-slide{animation-play-state:paused!important}
 .bbh-fill{position:absolute;inset:0;overflow:hidden}
 
@@ -219,30 +246,66 @@
 @media (max-width:1100px) and (min-width:901px){
   .bbh-h{font-size:58px}.cv-h{font-size:80px}.st-h{font-size:64px}
 }
+/* phones and tablets (portrait): picture on top, copy at the bottom; everything scales with the width */
 @media (max-width:900px){
-  .bbh{min-height:600px}
-  .bbh-copy{top:auto;right:0;left:0;width:100%!important;padding:0 24px 76px}
-  .bbh-h{font-size:40px}
-  .bbh-p{font-size:15px;margin:18px 0 24px}
-  .bbh-label{left:20px;top:16px;font-size:11px}
-  .bbh-nav{right:24px;left:24px;bottom:14px}
+  .bbh{min-height:580px}
+  .bbh-copy{top:auto;right:0;left:0;width:100%!important;padding:0 clamp(20px,6vw,64px) clamp(68px,8svh,112px)}
+  .bbh-h{font-size:clamp(38px,7.4vw,66px)}
+  .bbh-p{font-size:clamp(15px,2.3vw,19px);line-height:1.95;margin:clamp(14px,2.2svh,26px) 0 clamp(18px,3svh,34px);max-width:620px}
+  .bbh-cta{min-width:0;padding:15px clamp(24px,4vw,36px);font-size:clamp(14px,1.9vw,16px)}
+  .bbh-label{left:clamp(16px,5vw,40px);top:16px;font-size:11px}
+  .bbh-nav{right:clamp(20px,6vw,64px);left:clamp(20px,6vw,64px);bottom:14px}
   .mv-shade{background:linear-gradient(0deg,rgba(3,5,12,.95) 0%,rgba(3,5,12,.86) 42%,rgba(3,5,12,.5) 60%,rgba(3,5,12,0) 78%)}
   .mv-stage{--sw:max(100cqw,calc(100cqh * 2133 / 1280));left:calc(50% + var(--sw) * .225)}
   .cv-geo{--sw:max(100cqw,calc(100cqh * 1413 / 2000 * 1.25));--oy:calc((100cqh - var(--sh)) * .95)}
   .cv-side{background:linear-gradient(0deg,rgba(0,0,0,.92) 0%,rgba(0,0,0,.7) 40%,rgba(0,0,0,0) 70%)}
-  .cv-h{font-size:52px}
+  .cv-h{font-size:clamp(50px,10vw,90px)}
   .cv-copy{transform:none}
-  .sh-row{padding:44px 20px 0;gap:0}
+  .sh-row{padding:clamp(40px,6svh,72px) clamp(20px,6vw,64px) 0;gap:0}
   .sh-stagewrap{order:-1;flex-basis:100%}
   .sh-stage{transform:scale(.52) translateX(-150px);margin:-150px 0 -140px}
-  .sh-copy{flex-basis:100%}
-  .sh-title{font-size:28px;margin:12px 0 8px}
-  .sh-text{font-size:14px;line-height:1.85;margin-bottom:16px}
+  .sh-copy{flex-basis:100%;max-width:640px}
+  .sh-title{font-size:clamp(28px,5.4vw,46px);margin:12px 0 8px}
+  .sh-text{font-size:clamp(14px,2.2vw,18px);line-height:1.85;margin-bottom:clamp(16px,2.6svh,28px)}
+  .sh-cta{padding:14px clamp(22px,3.6vw,30px);font-size:clamp(14px,1.9vw,16px)}
   .sh-shelf{display:none}
   .sh-wrap{justify-content:flex-start;padding-bottom:60px}
-  .st-stage{width:100%;bottom:auto;height:36%;-webkit-mask-image:linear-gradient(to top,transparent 0%,#000 20%);mask-image:linear-gradient(to top,transparent 0%,#000 20%)}
+  .st-stage{width:100%;bottom:auto;height:38%;-webkit-mask-image:linear-gradient(to top,transparent 0%,#000 20%);mask-image:linear-gradient(to top,transparent 0%,#000 20%)}
   .st-tag{display:none}
-  .st-h{font-size:46px}
+  .st-h{font-size:clamp(44px,9vw,80px)}
+}
+/* tablets: a bigger magazine stack, centred */
+@media (min-width:601px) and (max-width:900px){
+  .sh-stage{transform:scale(.8) translateX(-130px);margin:-60px 0 -40px}
+  .sh-row{justify-content:center}
+  .st-stage{height:44%}
+}
+/* small phones (short screens): tighten so the copy never runs into the picture */
+@media (max-width:600px) and (max-height:720px){
+  .bbh-h{font-size:34px}.cv-h{font-size:46px}.st-h{font-size:40px}
+  .bbh-p{font-size:14px;line-height:1.85;margin:12px 0 18px}
+  .bbh-copy{padding-bottom:60px}
+  .sh-stage{transform:scale(.44) translateX(-170px);margin:-168px 0 -168px}
+  .sh-title{font-size:24px}.sh-text{font-size:13px}
+}
+/* phones held sideways: the screen is wide but very short, so go back to a side-by-side layout */
+@media (max-height:520px) and (orientation:landscape){
+  .bbh{min-height:340px}
+  .bbh-copy{top:0;bottom:0;right:6%;left:auto;width:min(520px,54%)!important;padding:36px 0 52px;justify-content:center}
+  .bbh-h{font-size:clamp(26px,4.4vw,40px)}.cv-h{font-size:clamp(34px,5.6vw,52px)}.st-h{font-size:clamp(30px,5vw,46px)}
+  .bbh-p{font-size:13px;line-height:1.8;margin:10px 0 14px}
+  .bbh-cta{padding:10px 22px;font-size:13px}
+  .bbh-nav{bottom:8px}
+  .mv-shade{background:radial-gradient(60% 80% at 76% 55%,rgba(3,5,12,.85) 0%,rgba(3,5,12,.55) 55%,rgba(3,5,12,0) 100%)}
+  .mv-stage{left:50%}
+  .cv-geo{--sw:max(100cqw,calc(100cqh * 1413 / 2000));--oy:calc((100cqh - var(--sh)) * .33)}
+  .cv-side{background:linear-gradient(270deg,rgba(0,0,0,.8) 0%,rgba(0,0,0,.4) 55%,rgba(0,0,0,0) 80%)}
+  .sh-row{flex-wrap:nowrap;align-items:center;padding:20px 6% 0}
+  .sh-stagewrap{order:0;flex:0 0 40%}
+  .sh-stage{transform:scale(.4) translateX(-130px);margin:-180px -190px}
+  .sh-title{font-size:22px}.sh-text{font-size:12px;line-height:1.75}
+  .sh-wrap{justify-content:center;padding-bottom:30px}
+  .st-stage{width:50%;height:auto;bottom:0;-webkit-mask-image:linear-gradient(to left,transparent 0%,#000 18%);mask-image:linear-gradient(to left,transparent 0%,#000 18%)}
 }
 
 @media (prefers-reduced-motion:reduce){

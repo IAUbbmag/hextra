@@ -54,18 +54,27 @@
   }
 
   /* ---------- slide switching ---------- */
-  function go(n) {
+  /* fwd: true = the next beat (moves with the reading direction), false = going back */
+  function go(n, fwd) {
+    var last = slides.length - 1;
+    if (fwd === undefined) fwd = n > cur || (cur === last && n > last);
     n = (n + slides.length) % slides.length;
     if (n === cur) return;
     var prev = slides[cur], next = slides[n];
     hydrate(next);
+    /* RTL reads right-to-left, so "forward" travels to the right; LTR to the left */
+    root.style.setProperty('--s', (ltr ? -1 : 1) * (fwd ? 1 : -1));
     clearTimeout(leaveTimer);
-    slides.forEach(function (s) { s.classList.remove('is-leaving'); });
+    slides.forEach(function (s) { s.classList.remove('is-leaving', 'is-entering'); });
+    void root.offsetWidth; /* restart the seam animations if a click lands mid-seam */
     prev.classList.remove('is-active');
     prev.classList.add('is-leaving');
     prev.setAttribute('aria-hidden', 'true');
-    leaveTimer = setTimeout(function () { prev.classList.remove('is-leaving'); }, 950);
-    next.classList.add('is-active');
+    next.classList.add('is-active', 'is-entering');
+    leaveTimer = setTimeout(function () {
+      prev.classList.remove('is-leaving');
+      next.classList.remove('is-entering');
+    }, 820);
     next.removeAttribute('aria-hidden');
     bars.forEach(function (b, i) {
       b.classList.remove('is-current');
@@ -79,7 +88,7 @@
   }
   bars.forEach(function (b, i) {
     b.addEventListener('click', function () { go(i); });
-    b.querySelector('i').addEventListener('animationend', function () { if (b.classList.contains('is-current')) go(cur + 1); });
+    b.querySelector('i').addEventListener('animationend', function () { if (b.classList.contains('is-current')) go(cur + 1, true); });
   });
 
   /* pause on mouse hover, and whenever the hero is off screen */
@@ -97,12 +106,12 @@
   root.addEventListener('touchend', function (e) {
     if (sx === null) return;
     var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(cur + ((dx > 0) !== ltr ? 1 : -1));
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { var f = (dx > 0) !== ltr; go(cur + (f ? 1 : -1), f); }
     sx = null;
   }, { passive: true });
   root.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft') go(cur + (ltr ? -1 : 1));
-    else if (e.key === 'ArrowRight') go(cur + (ltr ? 1 : -1));
+    if (e.key === 'ArrowLeft') go(cur + (ltr ? -1 : 1), !ltr);
+    else if (e.key === 'ArrowRight') go(cur + (ltr ? 1 : -1), ltr);
   });
 
   /* ---------- per-slide behaviour ---------- */
