@@ -7,7 +7,7 @@
 .bbh{--acc:#5BE0FF;--fg:#EEF3FF;--muted:#B4BFDA;--bg:#03050C;
   position:relative;overflow:hidden;width:100%;
   height:calc(100vh - var(--navbar-height,4rem));height:calc(100svh - var(--navbar-height,4rem));min-height:560px;
-  background:var(--bg);color:var(--fg);font-family:'BBAlex',Tahoma,sans-serif;isolation:isolate;
+  background:var(--bg);color:var(--fg);font-family:'BBVazir',Tahoma,sans-serif;isolation:isolate;
   -webkit-font-smoothing:antialiased}
 .bbh *,.bbh *::before,.bbh *::after{box-sizing:border-box}
 /* home.css sets font-family on every element; keep the hero on its own fonts */
@@ -53,7 +53,7 @@
 /* ---------- shared type ---------- */
 .bbh[dir="ltr"] .bbh-h{letter-spacing:-1.5px}
 .bbh-copy{position:absolute;top:0;bottom:0;right:8%;display:flex;flex-direction:column;justify-content:center;padding:70px 0 90px;z-index:4}
-.bbh-h{margin:0;white-space:nowrap;font-size:72px;line-height:1.3;letter-spacing:-1px;font-weight:200;color:var(--fg)}
+.bbh-h{margin:0;white-space:nowrap;font-size:72px;line-height:1.3;letter-spacing:0;font-weight:200;color:var(--fg)}
 .bbh-line{display:block;font-weight:200}
 .bbh-grad{font-weight:800;background:linear-gradient(90deg,#8C7CFF 0%,#5BE0FF 60%,#B6F4FF 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bbh-line.bbh-grad{display:block}
@@ -133,7 +133,7 @@
   background:radial-gradient(circle min(170px,30cqw) at var(--lx) var(--ly),rgba(200,235,255,.14) 0%,rgba(200,235,255,0) 100%),
     radial-gradient(circle min(430px,70cqw) at var(--lx) var(--ly),rgba(0,0,0,0) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,.6) 60%,rgba(0,0,0,.94) 100%);
   transition:opacity .4s}
-.is-active .cv-tour,.is-leaving .cv-tour{animation:cvTour 11s cubic-bezier(.65,0,.35,1) infinite}
+.is-active .cv-tour,.is-leaving .cv-tour{animation:cvTour 7s cubic-bezier(.65,0,.35,1) infinite}
 @keyframes cvTour{
   0%{--bbx:.46;--bby:.37} 13%{--bbx:.46;--bby:.37}
   20%{--bbx:.221;--bby:.331} 33%{--bbx:.221;--bby:.331}
@@ -157,7 +157,7 @@
    3. SHELF — 3D stack of the published issues
    ========================================================================== */
 .bbh-shelf{background:#06061A}
-.sh-wrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;font-family:'BBAlex',Tahoma,sans-serif}
+.sh-wrap{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;font-family:'BBVazir',Tahoma,sans-serif}
 .sh-bg{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s ease;background:radial-gradient(900px 640px at 28% 42%,var(--c) 0%,rgba(6,6,26,0) 65%)}
 .sh-bg.is-on{opacity:1}
 .sh-wrap::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,6,26,0) 55%,#06061A 100%);pointer-events:none}
@@ -239,6 +239,31 @@
 .st-copy{width:min(580px,40%)}
 .st-h{font-size:80px;line-height:1.25}
 .st-h .bbh-heavy{font-weight:800}
+
+/* ==========================================================================
+   Film layer — what makes it feel shot rather than animated. Pure CSS, no images.
+   - grain: a few hundred bytes of SVG noise, flickered with steps() on desktops only
+   - vignette: darker edges, always on
+   - letterbox: black bars close in a little while the cut happens, then open again
+   - flare: a thin anamorphic light streak crosses the frame exactly at the cut
+   ========================================================================== */
+.bbh-film{position:absolute;inset:0;z-index:7;pointer-events:none;overflow:hidden}
+.bbh-film::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 45%,rgba(0,0,0,0) 55%,rgba(0,0,0,.42) 100%)}
+.bbh-film::after{content:"";position:absolute;inset:-60px;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@media (pointer:fine) and (min-width:901px){.bbh-film::after{animation:bbhGrain .9s steps(6) infinite}}
+.bbh.is-paused-view .bbh-film::after{animation-play-state:paused}
+@keyframes bbhGrain{0%{transform:translate(0,0)}20%{transform:translate(-22px,14px)}40%{transform:translate(18px,-26px)}60%{transform:translate(-30px,-8px)}80%{transform:translate(12px,28px)}100%{transform:translate(0,0)}}
+.bbh-lb{position:absolute;left:0;right:0;height:7%;background:#000;transform:scaleY(0)}
+.bbh-lb-t{top:0;transform-origin:top}
+.bbh-lb-b{bottom:0;transform-origin:bottom}
+.bbh.is-cut .bbh-lb{animation:bbhLb .9s cubic-bezier(.65,0,.35,1) both}
+@keyframes bbhLb{0%{transform:scaleY(0)}35%,55%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+.bbh-flare{position:absolute;left:-10%;right:-10%;top:47%;height:2px;opacity:0;
+  background:linear-gradient(90deg,rgba(91,224,255,0) 0%,rgba(91,224,255,.9) 42%,#fff 50%,rgba(140,124,255,.9) 58%,rgba(140,124,255,0) 100%);
+  box-shadow:0 0 18px 4px rgba(91,224,255,.45),0 0 60px 10px rgba(140,124,255,.18);filter:blur(.4px)}
+.bbh.is-cut .bbh-flare{animation:bbhFlare .62s cubic-bezier(.2,.7,.1,1) .16s both}
+@keyframes bbhFlare{0%{opacity:0;transform:translateX(calc(var(--s) * -30%)) scaleX(.2)}35%{opacity:1}100%{opacity:0;transform:translateX(calc(var(--s) * 30%)) scaleX(1.1)}}
 
 /* ==========================================================================
    Responsive

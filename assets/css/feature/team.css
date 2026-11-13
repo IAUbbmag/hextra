@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Homepage team section (partials/teamcredits.html + js/feature/team.js)
+   A dark "screen" panel; a spotlight visits each person in turn. Scoped under .bbt.
+   ========================================================================== */
+.bbt{--acc:#5BE0FF;position:relative;overflow:hidden;isolation:isolate;max-width:1280px;margin:120px auto 0;padding:64px 0 56px;border-radius:28px;
+  background:radial-gradient(70% 90% at 50% 100%,#0A1128 0%,#050815 60%,#03050C 100%);color:#EEF3FF;font-family:'BBVazir',Tahoma,sans-serif;text-align:start;
+  -webkit-font-smoothing:antialiased}
+.bbt *,.bbt *::before,.bbt *::after{box-sizing:border-box;font-family:inherit}
+.bbt a{text-decoration:none;color:inherit}
+/* grain, same recipe as the hero's film layer */
+.bbt::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.06;mix-blend-mode:overlay;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.bbt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;padding:0 clamp(20px,4vw,56px);margin-bottom:24px}
+.bbt-titles{display:flex;flex-direction:column;gap:10px}
+.bbt-kicker{font-family:'BBMono',monospace;font-size:12px;letter-spacing:3px;color:#6F7DA3;direction:ltr;text-align:start}
+.bbt[dir="rtl"] .bbt-kicker{text-align:right}
+.bbt-kicker span{color:var(--acc);animation:bbtBlink 1.1s steps(1) infinite}
+@keyframes bbtBlink{50%{opacity:0}}
+.bbt-title{margin:0;font-size:clamp(26px,3vw,36px);font-weight:700;line-height:1.4;color:#F4F7FF}
+.bbt-all{display:inline-flex;align-items:center;min-height:44px;padding:0 22px;border:1px solid rgba(91,224,255,.5);color:var(--acc)!important;font-size:15px;font-weight:600;
+  clip-path:polygon(0 0,100% 0,100% 70%,94% 100%,0 100%);transition:box-shadow .3s,transform .3s,background .3s}
+.bbt-all:hover,.bbt-all:focus-visible{background:rgba(91,224,255,.08);box-shadow:0 0 24px rgba(91,224,255,.35);transform:translateY(-2px)}
+
+/* the row of people */
+.bbt-row{list-style:none;margin:0;padding:0 clamp(20px,4vw,56px);display:flex;justify-content:center;align-items:flex-start;gap:clamp(10px,1.3vw,18px)}
+.bbt-p{flex:0 0 auto;width:150px;margin:0;padding:0}
+.bbt-link{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;outline:none}
+.bbt-stage{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;height:230px;margin-bottom:14px}
+/* the floor line all portraits stand on */
+.bbt-stage::after{content:"";position:absolute;left:-14px;right:-14px;bottom:0;height:1px;background:linear-gradient(90deg,rgba(91,224,255,0),rgba(91,224,255,.28),rgba(91,224,255,0))}
+.bbt-img{position:relative;z-index:1;display:block;width:100%;height:auto;max-height:100%;object-fit:contain;object-position:bottom;
+  filter:grayscale(1) brightness(.42);transform:translateY(6px) scale(.95);transform-origin:bottom center;
+  transition:filter .8s cubic-bezier(.2,.7,.1,1),transform .8s cubic-bezier(.2,.7,.1,1)}
+.bbt-cone{position:absolute;left:-34px;right:-34px;bottom:0;height:300px;z-index:0;clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);mix-blend-mode:screen;pointer-events:none;
+  background:linear-gradient(180deg,rgba(200,238,255,.32),rgba(150,220,255,.04));opacity:0;transition:opacity .6s}
+.bbt-floor{position:absolute;left:-8px;right:-8px;bottom:-12px;height:26px;z-index:0;border-radius:50%;background:radial-gradient(closest-side,rgba(190,236,255,.38),rgba(150,220,255,0));opacity:0;transition:opacity .6s}
+.bbt-name{font-size:15.5px;font-weight:600;line-height:1.6;color:#fff;opacity:.55;transition:opacity .5s}
+.bbt-role{font-size:13px;font-weight:300;line-height:1.6;color:#fff;opacity:.4;transition:opacity .5s}
+
+/* the one in the light */
+.bbt-p.is-on .bbt-img{filter:none;transform:none}
+.bbt-p.is-on .bbt-cone,.bbt-p.is-on .bbt-floor{opacity:1}
+.bbt-p.is-on .bbt-name{opacity:1}
+.bbt-p.is-on .bbt-role{opacity:.78}
+.bbt-link:focus-visible .bbt-name{outline:2px solid var(--acc);outline-offset:4px;border-radius:4px}
+
+/* the association's logo sits in a disc at chest height */
+.bbt-p.is-logo .bbt-img,.bbt-ph{width:108px;height:108px;margin-bottom:46px;border-radius:50%;object-fit:contain;padding:14px;background:rgba(238,243,255,.06);border:1px solid rgba(238,243,255,.16)}
+.bbt-ph{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;color:#9AA3C2;filter:brightness(.6);transition:filter .8s,color .8s}
+.bbt-ph svg{width:52px;height:52px}
+.bbt-p.is-on .bbt-ph{filter:none;color:var(--acc)}
+.bbt-p.is-logo .bbt-img{max-height:none;transform:none;filter:grayscale(1) brightness(.6)}
+.bbt-p.is-logo.is-on .bbt-img{filter:none}
+
+/* tablets and phones: the row scrolls sideways, snapping to each person */
+@media (max-width:1100px){
+  .bbt{margin-top:80px;border-radius:22px}
+  .bbt-row{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .bbt-row::-webkit-scrollbar{display:none}
+  .bbt-p{width:118px;scroll-snap-align:center}
+  .bbt-stage{height:200px}
+  .bbt-p.is-logo .bbt-img,.bbt-ph{width:94px;height:94px;margin-bottom:40px}
+}
+@media (max-width:600px){
+  .bbt{border-radius:18px;padding:44px 0 40px}
+  .bbt-head{flex-direction:column;align-items:flex-start}
+  .bbt-p{width:108px}
+  .bbt-stage{height:180px}
+  .bbt-name{font-size:15px}.bbt-role{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .bbt-img,.bbt-cone,.bbt-floor,.bbt-name,.bbt-role,.bbt-ph{transition:none}
+  .bbt-kicker span{animation:none}
+}

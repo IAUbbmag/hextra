@@ -12,7 +12,8 @@
     page has loaded, so they never compete with the first paint.
   - All motion is CSS (transform / opacity / custom properties); animations only run on the
     visible slide and are paused when the hero is scrolled out of view.
-  - Fonts are subsetted (Persian + Latin) and only used inside the hero.
+  - Fonts are subsetted (Persian + Latin): Vazirmatn (OFL, see assets/fonts/Vazirmatn-OFL.txt)
+    for the copy and JetBrains Mono for the small labels. The team section reuses Vazirmatn.
 */ -}}
 {{- $hero := .Params.heroslider -}}
 {{- $page := . -}}
@@ -22,12 +23,12 @@
 {{- $str := merge (dict "slide" "اسلاید" "contents" "فهرست مطالب" "cover" "جلد" "backTitle" "بیت و بایت" "backText" "نشریه دانشجویی مهندسی کامپیوتر و هوش مصنوعی<br>دانشگاه آزاد اسلامی واحد شیراز") ($hero.strings | default dict) -}}
 {{- $css := resources.Get "css/feature/hero.css" | minify | fingerprint -}}
 {{- $js := resources.Get "js/feature/hero.js" | minify | fingerprint -}}
-{{- $alex := resources.Get "fonts/alexandria-fa.woff2" -}}
+{{- $vazir := resources.Get "fonts/vazirmatn.woff2" -}}
 {{- $mono := resources.Get "fonts/jbmono-latin.woff2" -}}
 
-<link rel="preload" href="{{ $alex.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ $vazir.RelPermalink }}" as="font" type="font/woff2" crossorigin>
 <style>
-  @font-face{font-family:'BBAlex';src:url({{ $alex.RelPermalink }}) format('woff2');font-weight:100 900;font-display:swap}
+  @font-face{font-family:'BBVazir';src:url({{ $vazir.RelPermalink }}) format('woff2');font-weight:200 800;font-display:swap}
   @font-face{font-family:'BBMono';src:url({{ $mono.RelPermalink }}) format('woff2');font-weight:100 800;font-display:swap}
 </style>
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
@@ -183,6 +184,8 @@
   </div>
   {{- end }}
 
+  {{- /* film layer: grain, vignette, and the letterbox + anamorphic flare that play across each seam */}}
+  <div class="bbh-film" aria-hidden="true"><i class="bbh-lb bbh-lb-t"></i><i class="bbh-lb bbh-lb-b"></i><i class="bbh-flare"></i></div>
   <div class="bbh-nav">
     <div class="bbh-bars">
       {{- range $i, $s := $hero.slides }}

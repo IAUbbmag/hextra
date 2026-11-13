@@ -66,15 +66,18 @@
     root.style.setProperty('--s', (ltr ? -1 : 1) * (fwd ? 1 : -1));
     clearTimeout(leaveTimer);
     slides.forEach(function (s) { s.classList.remove('is-leaving', 'is-entering'); });
+    root.classList.remove('is-cut');
     void root.offsetWidth; /* restart the seam animations if a click lands mid-seam */
     prev.classList.remove('is-active');
     prev.classList.add('is-leaving');
     prev.setAttribute('aria-hidden', 'true');
     next.classList.add('is-active', 'is-entering');
+    root.classList.add('is-cut'); /* letterbox + lens flare across the seam (hero.css) */
     leaveTimer = setTimeout(function () {
       prev.classList.remove('is-leaving');
       next.classList.remove('is-entering');
-    }, 820);
+      root.classList.remove('is-cut');
+    }, 900);
     next.removeAttribute('aria-hidden');
     bars.forEach(function (b, i) {
       b.classList.remove('is-current');
@@ -153,7 +156,7 @@
       var w = slide.querySelector('.sh-wrap');
       if (root.classList.contains('is-paused') || w.classList.contains('is-open')) return;
       shelfShow(slide, (+w.dataset.cur || 0) + 1);
-    }, 4000);
+    }, 3000);
   }
   function shelfShow(slide, k) {
     var w = slide.querySelector('.sh-wrap');
