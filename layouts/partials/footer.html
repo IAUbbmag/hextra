@@ -37,7 +37,7 @@
   {{- end -}}
 
   <!-- Main Footer Content -->
-  <div class="hextra-custom-footer pl-[max(env(safe-area-inset-left),1.5rem)] hx-pr-[max(env(safe-area-inset-right),1.5rem)] hx-text-gray-600 dark:text-gray-400">
+  <div class="hextra-custom-footer overflow-x-clip pl-[max(env(safe-area-inset-left),1.5rem)] hx-pr-[max(env(safe-area-inset-right),1.5rem)] hx-text-gray-600 dark:text-gray-400">
     <div class="container mx-auto flex flex-col md:flex-row md:justify-between md:items-center gap-8">
       <!-- Logo and Footnote -->
       <div class="pt-8 md:self-start md:pl-0">
@@ -52,7 +52,7 @@
       <!-- Follow Us and Quick Links Wrapper -->
       <div class="min-[780px]:mt-8 flex flex-col md:flex-row-reverse md:space-x-reverse md:space-x-8 max-[780px]:flex-row-reverse max-[780px]:justify-center max-[780px]:gap-4 max-[780px]:w-full">
         <!-- Follow Us -->
-        <div class=" mb-6 text-center min-w-[200px] min-h-[200px] max-[780px]:w-1/2 ">
+        <div class=" mb-6 text-center min-w-[200px] max-[780px]:min-w-0 min-h-[200px] max-[780px]:w-1/2 ">
           <h3 class="text-gray-600 text-lg font-semibold mb-4">{{ $follow }}</h3>
           <ul class=" px-[85px] space-y-3 max-w-[200px] ">
             <li class=" group relative flex ">
@@ -91,7 +91,7 @@
         </div>
 
         <!-- Quick Links -->
-        <div class="mb-6 text-center min-w-[200px] min-h-[200px] max-[780px]:w-1/2">
+        <div class="mb-6 text-center min-w-[200px] max-[780px]:min-w-0 min-h-[200px] max-[780px]:w-1/2">
           <h3 class="text-gray-600 text-lg font-semibold mb-4">{{ $quicklinks }}</h3>
           <ul class="font-semibold text-gray-600 space-y-2">
             {{ if eq .Page.Lang "fa" }}

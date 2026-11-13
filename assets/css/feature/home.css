@@ -4,7 +4,6 @@
    Imported Open Sans font for typography consistency.
    Applied to all elements to ensure uniform styling.
 ================================================== */
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800");
 
 * {
   box-sizing: border-box;

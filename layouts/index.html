@@ -11,8 +11,6 @@
   {{- $jquery := resources.Get "js/feature/jquery-3.6.0.min.js" }}
   {{- $homejs := resources.Get "js/feature/home.js" }}
 
-  <!-- External font icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <!-- CSS resources -->
   <link rel="stylesheet" href="{{ $aoscss.RelPermalink }}">
@@ -63,10 +61,11 @@
         </div>
 
         <!-- ==================================================
-           Team Staff Section
-           Displays the team member cards with animations.
+           Team Section
+           The core team under a moving spotlight (front matter `team:`);
+           pages that still use the old `teamstaff:` cards keep working.
         ================================================== -->
-        {{ partial "teamstaff.html" . }}
+        {{ if .Params.team }}{{ partial "teamcredits.html" . }}{{ else if .Params.teamstaff }}{{ partial "teamstaff.html" . }}{{ end }}
 
         <!-- ==================================================
            Testimonials Slider

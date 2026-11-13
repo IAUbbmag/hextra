@@ -1,7 +1,8 @@
 {{- /*
   Hero slider for the homepage.
 
-  Content comes from the page's front matter (`heroslider:`), see content/fa/_index.md.
+  Content comes from the page's front matter (`heroslider:`), see content/fa/_index.md and
+  content/en/_index.md. Interface words that are not slide copy live in `heroslider.strings`.
   Four slide kinds are supported: "move" (robotic hand), "cover" (issue cover with a moving light),
   "shelf" (3D stack of published issues) and "stage" (call for collaboration).
 
@@ -11,24 +12,28 @@
     page has loaded, so they never compete with the first paint.
   - All motion is CSS (transform / opacity / custom properties); animations only run on the
     visible slide and are paused when the hero is scrolled out of view.
-  - Fonts are subsetted (Persian + Latin) and only used inside the hero.
+  - Fonts are subsetted (Persian + Latin): Vazirmatn (OFL, see assets/fonts/Vazirmatn-OFL.txt)
+    for the copy and JetBrains Mono for the small labels. The team section reuses Vazirmatn.
 */ -}}
 {{- $hero := .Params.heroslider -}}
 {{- $page := . -}}
-{{- $fd := slice "۰" "۱" "۲" "۳" "۴" "۵" "۶" "۷" "۸" "۹" -}}
+{{- $dir := site.Language.LanguageDirection | default "ltr" -}}
+{{- $fd := slice "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" -}}
+{{- if eq site.Language.Lang "fa" }}{{ $fd = slice "۰" "۱" "۲" "۳" "۴" "۵" "۶" "۷" "۸" "۹" }}{{ end -}}
+{{- $str := merge (dict "slide" "اسلاید" "contents" "فهرست مطالب" "cover" "جلد" "backTitle" "بیت و بایت" "backText" "نشریه دانشجویی مهندسی کامپیوتر و هوش مصنوعی<br>دانشگاه آزاد اسلامی واحد شیراز") ($hero.strings | default dict) -}}
 {{- $css := resources.Get "css/feature/hero.css" | minify | fingerprint -}}
 {{- $js := resources.Get "js/feature/hero.js" | minify | fingerprint -}}
-{{- $alex := resources.Get "fonts/alexandria-fa.woff2" -}}
+{{- $vazir := resources.Get "fonts/vazirmatn.woff2" -}}
 {{- $mono := resources.Get "fonts/jbmono-latin.woff2" -}}
 
-<link rel="preload" href="{{ $alex.RelPermalink }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ $vazir.RelPermalink }}" as="font" type="font/woff2" crossorigin>
 <style>
-  @font-face{font-family:'BBAlex';src:url({{ $alex.RelPermalink }}) format('woff2');font-weight:100 900;font-display:swap}
+  @font-face{font-family:'BBVazir';src:url({{ $vazir.RelPermalink }}) format('woff2');font-weight:200 800;font-display:swap}
   @font-face{font-family:'BBMono';src:url({{ $mono.RelPermalink }}) format('woff2');font-weight:100 800;font-display:swap}
 </style>
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 
-<section class="bbh" id="bb-hero" dir="rtl" aria-roledescription="carousel" aria-label="{{ $hero.ariaLabel | default "Bit and Byte" }}">
+<section class="bbh" id="bb-hero" dir="{{ $dir }}" lang="{{ site.Language.Lang }}" aria-roledescription="carousel" aria-label="{{ $hero.ariaLabel | default "Bit and Byte" }}">
   {{- $count := len $hero.slides -}}
   {{- range $i, $s := $hero.slides }}
   {{- $first := eq $i 0 -}}
@@ -57,7 +62,7 @@
       <div class="bbh-copy mv-copy">
         <h2 class="bbh-h">
           {{- range $k, $line := $s.lines }}
-          <span class="bbh-line{{ if eq $k 1 }} bbh-grad{{ end }}" data-scramble="{{ $line }}" data-at="{{ index (slice 20 30 38) $k }}">{{ $line }}</span>
+          <span class="bbh-line{{ if eq $k ($s.accent | default 1) }} bbh-grad{{ end }}" data-scramble="{{ $line }}" data-at="{{ index (slice 20 30 38) $k }}">{{ $line }}</span>
           {{- end }}
         </h2>
         <p class="bbh-p bbh-rise" style="--d:2.2s"><span class="bbh-lead">{{ $s.lead }}</span>{{ $s.text }}</p>
@@ -118,14 +123,14 @@
                   {{- range $k, $it := $issues }}
                   <button type="button" class="sh-card" data-k="{{ $k }}" data-pos="{{ $k }}" data-color="{{ $it.color }}" data-ink="{{ $it.ink }}" aria-label="{{ $it.label }}">
                     <span class="sh-inside">
-                      <span class="sh-kicker">فهرست مطالب {{ $it.label }}</span>
+                      <span class="sh-kicker">{{ $str.contents }} {{ $it.label }}</span>
                       {{- range $j, $t := $it.p.Params.toci }}
                       <span class="sh-toc">{{- $n := add $j 1 -}}<b style="color:{{ $it.color }}">{{ if lt $n 10 }}{{ index $fd $n }}{{ else }}{{ index $fd (div $n 10) }}{{ index $fd (mod $n 10) }}{{ end }}</b><span>{{ $t.title }}</span></span>
                       {{- end }}
                     </span>
                     <span class="sh-cover">
-                      <span class="sh-back"><b>بیت و بایت</b><span>نشریه دانشجویی مهندسی کامپیوتر و هوش مصنوعی<br>دانشگاه آزاد اسلامی واحد شیراز</span><i>{{ $it.label }}</i></span>
-                      <span class="sh-front"><img data-src="{{ $it.img.RelPermalink }}" width="{{ $it.img.Width }}" height="{{ $it.img.Height }}" alt="جلد {{ $it.label }} بیت و بایت" decoding="async"><span class="sh-gloss"></span></span>
+                      <span class="sh-back"><b>{{ $str.backTitle }}</b><span>{{ $str.backText | safeHTML }}</span><i>{{ $it.label }}</i></span>
+                      <span class="sh-front"><img data-src="{{ $it.img.RelPermalink }}" width="{{ $it.img.Width }}" height="{{ $it.img.Height }}" alt="{{ $str.cover }} {{ $it.label }} — {{ $str.backTitle }}" decoding="async"><span class="sh-gloss"></span></span>
                     </span>
                   </button>
                   {{- end }}
@@ -166,7 +171,8 @@
       <div class="bbh-copy st-copy">
         <h2 class="bbh-h st-h">
           {{- range $k, $line := $s.lines }}
-          <span class="bbh-w{{ if eq $k 1 }} bbh-heavy{{ end }}" style="--d:{{ index (slice ".35s" ".6s" ".85s") $k }}">{{ if eq $k 1 }}<span class="bbh-grad">{{ $line }}</span>{{ else }}{{ $line }}{{ end }}</span>
+          {{- $acc := $s.accent | default 1 -}}
+          <span class="bbh-w{{ if eq $k $acc }} bbh-heavy{{ end }}" style="--d:{{ index (slice ".35s" ".6s" ".85s") $k }}">{{ if eq $k $acc }}<span class="bbh-grad">{{ $line }}</span>{{ else }}{{ $line }}{{ end }}</span>
           {{- end }}
         </h2>
         <p class="bbh-p bbh-rise" style="--d:1.3s">{{ $s.text }}</p>
@@ -178,10 +184,12 @@
   </div>
   {{- end }}
 
+  {{- /* film layer: grain, vignette, and the letterbox + anamorphic flare that play across each seam */}}
+  <div class="bbh-film" aria-hidden="true"><i class="bbh-lb bbh-lb-t"></i><i class="bbh-lb bbh-lb-b"></i><i class="bbh-flare"></i></div>
   <div class="bbh-nav">
     <div class="bbh-bars">
       {{- range $i, $s := $hero.slides }}
-      <button type="button" class="bbh-bar{{ if eq $i 0 }} is-current{{ end }}" data-go="{{ $i }}" aria-label="اسلاید {{ index $fd (add $i 1) }}" style="--dur:{{ $s.seconds | default 9 }}s"><i></i></button>
+      <button type="button" class="bbh-bar{{ if eq $i 0 }} is-current{{ end }}" data-go="{{ $i }}" aria-label="{{ $str.slide }} {{ index $fd (add $i 1) }}" style="--dur:{{ $s.seconds | default 9 }}s"><i></i></button>
       {{- end }}
     </div>
     <span class="bbh-count"><b>01</b> / {{ printf "%02d" $count }}</span>

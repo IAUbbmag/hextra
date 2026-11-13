@@ -62,6 +62,9 @@
   </script>
 
   {{ partial "custom/head-end.html" . }}
-  <script src="https://cdn.tailwindcss.com"></script>
+  {{- /* Site Tailwind classes, prebuilt (see site-tailwind.config.js). Replaces the runtime CDN script. */ -}}
+  {{- with resources.Get "css/site-tailwind.css" | fingerprint }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+  {{- end }}
 
 </head>

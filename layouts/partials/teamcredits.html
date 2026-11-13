@@ -1,0 +1,68 @@
+{{- /*
+  Homepage team section: "credits" under a moving spotlight.
+
+  Content comes from the page's front matter (`team:`), see content/fa/_index.md and content/en/_index.md:
+    team:
+      title: "..."            section title
+      allText: "..."          text of the link to the full staff page
+      allUrl: "fa/staff"
+      members:
+        - name: "..."
+          role: "..."          optional (leave out for no role)
+          image: "images/home/staff-x.png"   a transparent cut-out portrait
+          logo: true           for an organisation logo instead of a portrait (image may be left out
+                               until the logo file exists; a neutral placeholder is shown meanwhile)
+          url: "fa/staff/x"    optional profile link
+
+  The spotlight visits each person in turn; hovering or focusing a person moves it there.
+  Portraits are resized to 300px WebP (shown at 136px) and load lazily.
+*/ -}}
+{{- $team := .Params.team -}}
+{{- $dir := site.Language.LanguageDirection | default "ltr" -}}
+{{- $css := resources.Get "css/feature/team.css" | minify | fingerprint -}}
+{{- $js := resources.Get "js/feature/team.js" | minify | fingerprint -}}
+{{- $vazir := resources.Get "fonts/vazirmatn.woff2" -}}
+{{- $mono := resources.Get "fonts/jbmono-latin.woff2" -}}
+<style>
+  @font-face{font-family:'BBVazir';src:url({{ $vazir.RelPermalink }}) format('woff2');font-weight:200 800;font-display:swap}
+  @font-face{font-family:'BBMono';src:url({{ $mono.RelPermalink }}) format('woff2');font-weight:100 800;font-display:swap}
+</style>
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+<section class="bbt" id="bb-team" dir="{{ $dir }}" lang="{{ site.Language.Lang }}" aria-labelledby="bb-team-title">
+  <div class="bbt-head">
+    <div class="bbt-titles">
+      <span class="bbt-kicker" aria-hidden="true">BIT&amp;BYTE // CREDITS<span>_</span></span>
+      <h2 class="bbt-title" id="bb-team-title">{{ $team.title }}</h2>
+    </div>
+    {{- with $team.allUrl }}
+    <a class="bbt-all" href="{{ (printf "%s/" .) | relURL }}">{{ $team.allText }}</a>
+    {{- end }}
+  </div>
+
+  <ul class="bbt-row">
+    {{- range $i, $m := $team.members }}
+    {{- $img := "" -}}
+    {{- with $m.image }}{{ with resources.Get . }}{{ $img = . }}{{ end }}{{ end -}}
+    <li class="bbt-p{{ if eq $i 0 }} is-on{{ end }}{{ if $m.logo }} is-logo{{ end }}" data-i="{{ $i }}">
+      <a class="bbt-link"{{ with $m.url }} href="{{ (printf "%s/" .) | relURL }}"{{ else }} tabindex="0"{{ end }}>
+        <span class="bbt-stage" aria-hidden="true">
+          <span class="bbt-cone"></span>
+          <span class="bbt-floor"></span>
+          {{- if $img }}
+          {{- $w := cond (gt $img.Width 300) ($img.Resize "300x webp q80") $img }}
+          <img class="bbt-img" src="{{ $w.RelPermalink }}" width="{{ $w.Width }}" height="{{ $w.Height }}" alt="" loading="lazy" decoding="async">
+          {{- else if $m.logo }}
+          <span class="bbt-ph">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="24" cy="10" r="4"/><circle cx="10" cy="34" r="4"/><circle cx="38" cy="34" r="4"/><circle cx="24" cy="26" r="3"/><path d="M24 14v9M21.6 27.8l-8.6 4.4M26.4 27.8l8.6 4.4M14 34h20"/></svg>
+          </span>
+          {{- end }}
+        </span>
+        <span class="bbt-name">{{ $m.name }}</span>
+        {{- with $m.role }}<span class="bbt-role">{{ . }}</span>{{ end }}
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</section>
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
